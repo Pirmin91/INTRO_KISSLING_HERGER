@@ -114,7 +114,7 @@ int main(void)
   /* LAB #10 Synchronization */
   for(;;)
   {
-	  WAIT1_Waitms(70);	// wait 1 second
+	  WAIT1_Waitms(200);	// wait 1 second
 	  LEDPin1_NegVal();
   }
 
