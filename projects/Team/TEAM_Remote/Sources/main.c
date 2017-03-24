@@ -119,6 +119,7 @@ int main(void)
 	  /* LAB #10 Synchronization */
 	  WAIT1_Waitms(200);	// wait 1 second
 	  LEDPin1_NegVal();
+
 	  /* LAB #12 Hard fault */
 	  void (*f)(void);
 	  void cause_hard_fault(void)

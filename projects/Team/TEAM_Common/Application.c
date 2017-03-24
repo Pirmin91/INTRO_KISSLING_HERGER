@@ -130,18 +130,11 @@ void APP_Start(void) {
   vTaskStartScheduler(); /* start the RTOS, create the IDLE task and run my tasks (if any) */
   /* does usually not return! */
 #else
-  __asm  volatile("cpsie i");
-  for(;;)
-  {
-	  WAIT1_Waitms(100); /*just wait for some arbitrary time*/
-
+  __asm volatile("cpsie i"); /* enable interrupts */
+  for(;;) {
+    WAIT1_Waitms(100); /* just wait for some arbitrary time .... */
+    LED1_Neg();
+    EVNT_HandleEvent(APP_EventHandler, TRUE);
   }
-#if PL_CONFIG_HAS_EVENTS
-  EVNT_SetEvent(EVNT_STARTUP);
 #endif
-  {
-
-
-  }
 }
-
