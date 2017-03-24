@@ -28,23 +28,40 @@ static EVNT_MemUnit EVNT_Events[((EVNT_NOF_EVENTS-1)/EVNT_MEM_UNIT_NOF_BITS)+1];
   (EVNT_Events[(event)/EVNT_MEM_UNIT_NOF_BITS]&((1u<<(EVNT_MEM_UNIT_NOF_BITS-1))>>(((event)%EVNT_MEM_UNIT_NOF_BITS)))) /*!< Return TRUE if event is set */
 
 void EVNT_SetEvent(EVNT_Handle event) {
-  /*! \todo Make it reentrant */
-  SET_EVENT(event);
+	/*! \todo Make it reentrant */
+	  CS1_CriticalVariable()
+
+	  CS1_EnterCritical();
+	  SET_EVENT(event);
+	  CS1_ExitCritical();
 }
 
 void EVNT_ClearEvent(EVNT_Handle event) {
-  /*! \todo Make it reentrant */
-  CLR_EVENT(event);
+	/*! \todo Make it reentrant */
+	  CS1_CriticalVariable()
+
+	  CS1_EnterCritical();
+	  CLR_EVENT(event);
+	  CS1_ExitCritical();
 }
 
 bool EVNT_EventIsSet(EVNT_Handle event) {
   /*! \todo Make it reentrant */
-  return GET_EVENT(event);
+	  bool res;
+	  CS1_CriticalVariable()
+
+	  CS1_EnterCritical();
+	  res = GET_EVENT(event);
+	  CS1_ExitCritical();
+	  return res;
+	  // return GET_EVENT(event);
 }
 
 bool EVNT_EventIsSetAutoClear(EVNT_Handle event) {
   bool res;
   /*! \todo Make it reentrant */
+  CS1_CriticalVariable()
+  CS1_EnterCritical();
   res = GET_EVENT(event);
   if (res) {
     CLR_EVENT(event); /* automatically clear event */
@@ -56,7 +73,8 @@ void EVNT_HandleEvent(void (*callback)(EVNT_Handle), bool clearEvent) {
    /* Handle the one with the highest priority. Zero is the event with the highest priority. */
    EVNT_Handle event;
    /*! \todo Make it reentrant */
-
+   CS1_CriticalVariable()
+   CS1_EnterCritical();
    for (event=(EVNT_Handle)0; event<EVNT_NOF_EVENTS; event++) { /* does a test on every event */
      if (GET_EVENT(event)) { /* event present? */
        if (clearEvent) {

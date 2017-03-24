@@ -31,10 +31,12 @@
 #include "Cpu.h"
 #include "Events.h"
 #include "FRTOS1.h"
-#include "RTOSCNTRLDD1.h"
 #include "MCUC1.h"
 #include "LEDPin1.h"
 #include "BitIoLdd17.h"
+#include "TI1.h"
+#include "TimerIntLdd1.h"
+#include "TU1.h"
 #include "WAIT1.h"
 #include "UTIL1.h"
 #include "KIN1.h"
@@ -87,6 +89,7 @@
 #include "Rx1.h"
 #include "USB0.h"
 #include "TmDt1.h"
+#include "HF2.h"
 #include "TMOUT1.h"
 #include "HF1.h"
 #include "CS1.h"
@@ -111,11 +114,18 @@ int main(void)
   /* Write your code here */
   /* For example: for(;;) { } */
 
-  /* LAB #10 Synchronization */
   for(;;)
   {
+	  /* LAB #10 Synchronization */
 	  WAIT1_Waitms(200);	// wait 1 second
 	  LEDPin1_NegVal();
+	  /* LAB #12 Hard fault */
+	  void (*f)(void);
+	  void cause_hard_fault(void)
+	  {
+	    f(); /* will cause a hard fault, as the function pointer is NULL */
+	  }
+
   }
 
   APP_Start();
