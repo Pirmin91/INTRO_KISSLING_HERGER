@@ -121,9 +121,13 @@ int main(void)
   /* For example: for(;;) { } */
   for(;;) {
 	  /* Lab #10 Synchronization */
-	  WAIT1_Waitms(1000);
-	  LEDPin1_NegVal();
-	  LEDPin2_NegVal();
+	  //WAIT1_Waitms(1000);
+	  //LEDPin1_NegVal();
+	  //LEDPin2_NegVal();
+
+	  /* Lab #12  Hard Faults */
+	  void (*f)(void) = NULL;
+	  f(); 	/* will cause a hard fault, as the function pointer is NULL */
   }
   APP_Start();
   /*** Don't write any code pass this line, or it will be deleted during code generation. ***/
