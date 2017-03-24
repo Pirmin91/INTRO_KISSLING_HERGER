@@ -18,7 +18,7 @@ typedef uint32_t EVNT_MemUnit; /*!< memory unit used to store events flags */
 #define EVNT_MEM_UNIT_NOF_BITS  (sizeof(EVNT_MemUnit)*8u)		//sizeof() gibt Byte zurück
   /*!< number of bits in memory unit */
 
-static EVNT_MemUnit EVNT_Events[((EVNT_NOF_EVENTS-1)/EVNT_MEM_UNIT_NOF_BITS)+1]; /*!< Bit set of events */
+static EVNT_MemUnit EVNT_Events[((EVNT_NOF_EVENTS-1)/EVNT_MEM_UNIT_NOF_BITS)+1]; /*!< Bit set of events */		//Wenn NOF Events grösser 32, dann wird ein Array mit 2 Stellen à 32Bits erstellt usw. --> wenn kleiner nur 1 à 32Bits
 
 #define SET_EVENT(event) \
   EVNT_Events[(event)/EVNT_MEM_UNIT_NOF_BITS] |= (1u<<(EVNT_MEM_UNIT_NOF_BITS-1))>>(((event)%EVNT_MEM_UNIT_NOF_BITS)) /*!< Set the event */
