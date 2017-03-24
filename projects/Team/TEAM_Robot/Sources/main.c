@@ -119,16 +119,16 @@ int main(void)
 
   /* Write your code here */
   /* For example: for(;;) { } */
-  for(;;) {
+  //for(;;) {
 	  /* Lab #10 Synchronization */
 	  //WAIT1_Waitms(1000);
 	  //LEDPin1_NegVal();
 	  //LEDPin2_NegVal();
 
 	  /* Lab #12  Hard Faults */
-	  void (*f)(void) = NULL;
-	  f(); 	/* will cause a hard fault, as the function pointer is NULL */
-  }
+	  //void (*f)(void) = NULL;  /* Deklaration Funktionspointer mit NULL Referenz */
+	  //f(); 	/* will cause a hard fault, as the function pointer is NULL */
+  //}
   APP_Start();
   /*** Don't write any code pass this line, or it will be deleted during code generation. ***/
   /*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS CODE!!! ***/

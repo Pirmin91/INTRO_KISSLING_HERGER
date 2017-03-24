@@ -15,7 +15,7 @@
 #include "CS1.h"
 
 typedef uint32_t EVNT_MemUnit; /*!< memory unit used to store events flags */
-#define EVNT_MEM_UNIT_NOF_BITS  (sizeof(EVNT_MemUnit)*8u)
+#define EVNT_MEM_UNIT_NOF_BITS  (sizeof(EVNT_MemUnit)*8u)		//sizeof() gibt Byte zurück
   /*!< number of bits in memory unit */
 
 static EVNT_MemUnit EVNT_Events[((EVNT_NOF_EVENTS-1)/EVNT_MEM_UNIT_NOF_BITS)+1]; /*!< Bit set of events */
