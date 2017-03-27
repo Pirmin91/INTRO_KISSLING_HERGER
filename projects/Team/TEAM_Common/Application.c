@@ -133,14 +133,30 @@ void APP_Start(void) {
   vTaskStartScheduler(); /* start the RTOS, create the IDLE task and run my tasks (if any) */
   /* does usually not return! */
 #else
+
+#if PL_CONFIG_HAS_SHELL
+  (void)CLS1_SetStdio(RTT1_GetStdio());		//Wählt die Default Serial Schnittstelle aus
+#endif
+
   __asm volatile("cpsie i"); /* enable interrupts */
   for(;;) {
 	/* check local platform configuration */
 	#if PL_LOCAL_CONFIG_BOARD_IS_ROBO
-	  WAIT1_Waitms(50);		//polling time
+	  //#Lab 15 Keys
+	  //WAIT1_Waitms(50);		//polling time
 	  //Polling Key
-	  KEY_Scan();
+	  //KEY_Scan();
+	  //#Lab 16 Console
+	  WAIT1_Waitms(100);
+	  CLS1_SendStr("Hello World", CLS1_GetStdio()->stdOut);
 	#elif PL_LOCAL_CONFIG_BOARD_IS_REMOTE
+	  //#Lab 15 Keys
+	  //WAIT1_Waitms(50);		//polling time
+	  //Polling Key
+	  //KEY_Scan();
+	  //#Lab 16 Console
+	  WAIT1_Waitms(100);
+	  CLS1_SendStr("Hello World", CLS1_GetStdio()->stdOut);
 	#else
 	  #error "One board type has to be defined in Platform_Local.h!"
 	#endif
