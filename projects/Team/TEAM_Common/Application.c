@@ -148,7 +148,7 @@ void APP_Start(void) {
 	  //KEY_Scan();
 	  //#Lab 16 Console
 	  WAIT1_Waitms(100);
-	  CLS1_SendStr("Hello World", CLS1_GetStdio()->stdOut);
+	  CLS1_SendStr("Hello World\n", CLS1_GetStdio()->stdOut);
 	#elif PL_LOCAL_CONFIG_BOARD_IS_REMOTE
 	  //#Lab 15 Keys
 	  //WAIT1_Waitms(50);		//polling time
@@ -156,7 +156,7 @@ void APP_Start(void) {
 	  //KEY_Scan();
 	  //#Lab 16 Console
 	  WAIT1_Waitms(100);
-	  CLS1_SendStr("Hello World", CLS1_GetStdio()->stdOut);
+	  CLS1_SendStr("Hello World\n", CLS1_GetStdio()->stdOut);
 	#else
 	  #error "One board type has to be defined in Platform_Local.h!"
 	#endif
