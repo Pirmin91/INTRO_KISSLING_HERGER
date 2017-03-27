@@ -49,6 +49,9 @@ void APP_EventHandler(EVNT_Handle event) {
   switch(event) {
   case EVNT_STARTUP:
     break;
+  case EVNT_SW1_PRESSED:
+	  LED1_Neg();
+    break;
   default:
     break;
    } /* switch */
@@ -132,8 +135,17 @@ void APP_Start(void) {
 #else
   __asm volatile("cpsie i"); /* enable interrupts */
   for(;;) {
-    WAIT1_Waitms(100); /* just wait for some arbitrary time .... */
-    LED1_Neg();
+	/* check local platform configuration */
+	#if PL_LOCAL_CONFIG_BOARD_IS_ROBO
+	  WAIT1_Waitms(50);		//polling time
+	  //Polling Key
+	  KEY_Scan();
+	#elif PL_LOCAL_CONFIG_BOARD_IS_REMOTE
+	#else
+	  #error "One board type has to be defined in Platform_Local.h!"
+	#endif
+    //WAIT1_Waitms(100); /* just wait for some arbitrary time .... */
+    //LED1_Neg();
     EVNT_HandleEvent(APP_EventHandler, TRUE);
   }
 #endif

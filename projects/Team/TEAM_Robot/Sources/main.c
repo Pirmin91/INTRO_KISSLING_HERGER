@@ -117,6 +117,7 @@ int main(void)
   PE_low_level_init();
   /*** End of Processor Expert internal initialization.                    ***/
 
+  APP_Start();
   /* Write your code here */
   /* For example: for(;;) { } */
   //for(;;) {
@@ -129,7 +130,7 @@ int main(void)
 	  //void (*f)(void) = NULL;  /* Deklaration Funktionspointer mit NULL Referenz */
 	  //f(); 	/* will cause a hard fault, as the function pointer is NULL */
   //}
-  APP_Start();
+
   /*** Don't write any code pass this line, or it will be deleted during code generation. ***/
   /*** RTOS startup code. Macro PEX_RTOS_START is defined by the RTOS component. DON'T MODIFY THIS CODE!!! ***/
   #ifdef PEX_RTOS_START
