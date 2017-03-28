@@ -81,13 +81,12 @@
   #include "Battery.h"
 #endif
 #include "KIN1.h"
-#include "AS1.h"
 #include "TmDt1.h"
 
 #define SHELL_CONFIG_HAS_SHELL_EXTRA_CDC   (1 && PL_CONFIG_HAS_USB_CDC)
 #define SHELL_CONFIG_HAS_SHELL_EXTRA_RTT   (1 && PL_CONFIG_HAS_SEGGER_RTT)
 #define SHELL_CONFIG_HAS_SHELL_EXTRA_BT    (1 && PL_CONFIG_HAS_BLUETOOTH)
-#define SHELL_CONFIG_HAS_SHELL_EXTRA_UART  (1 && !SHELL_CONFIG_HAS_SHELL_EXTRA_BT)
+#define SHELL_CONFIG_HAS_SHELL_EXTRA_UART  (0 && !SHELL_CONFIG_HAS_SHELL_EXTRA_BT)
 
 typedef struct {
   CLS1_ConstStdIOType *stdio;
@@ -316,9 +315,11 @@ static uint8_t SHELL_ParseCommand(const unsigned char *cmd, bool *handled, const
   return ERR_OK;
 }
 
+#if 0
 void SHELL_ParseCmd(uint8_t *cmd) {
   (void)CLS1_ParseWithCommandTable(cmd, ios[0].stdio, CmdParserTable);
 }
+#endif
 
 #if PL_CONFIG_HAS_RTOS
 static void ShellTask(void *pvParameters) {
@@ -346,7 +347,7 @@ static void ShellTask(void *pvParameters) {
 
 void SHELL_Init(void) {
   SHELL_val = 0;
-  CLS1_SetStdio(SHELL_GetStdio());
+  CLS1_SetStdio(RTT1_GetStdio());
 #if !CLS1_DEFAULT_SERIAL && PL_CONFIG_CONFIG_HAS_BLUETOOTH
   (void)CLS1_SetStdio(&BT_stdio); /* use the Bluetooth stdio as default */
 #endif
