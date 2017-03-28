@@ -154,6 +154,7 @@ void APP_Start(void) {
 	  //WAIT1_Waitms(50);		//polling time
 	  //Polling Key
 	  //KEY_Scan();
+
 	  //#Lab 16 Console
 	  WAIT1_Waitms(100);
 	  CLS1_SendStr("Hello World\n", CLS1_GetStdio()->stdOut);

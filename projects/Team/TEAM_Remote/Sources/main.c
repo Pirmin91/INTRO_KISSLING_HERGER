@@ -114,20 +114,20 @@ int main(void)
   /* Write your code here */
   /* For example: for(;;) { } */
 
-  for(;;)
-  {
-	  /* LAB #10 Synchronization */
-	  WAIT1_Waitms(200);	// wait 1 second
-	  LEDPin1_NegVal();
+  //for(;;)
+  //{
+//	  /* LAB #10 Synchronization */
+//	  WAIT1_Waitms(200);	// wait 1 second
+//	  LEDPin1_NegVal();
 
 	  /* LAB #12 Hard fault */
-	  void (*f)(void);
-	  void cause_hard_fault(void)
-	  {
-	    f(); /* will cause a hard fault, as the function pointer is NULL */
-	  }
+//	  void (*f)(void);
+//	  void cause_hard_fault(void)
+	//  {
+	//    f(); /* will cause a hard fault, as the function pointer is NULL */
+	//  }
 
-  }
+  //}
 
   APP_Start();
 
