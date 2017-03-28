@@ -50,8 +50,28 @@ void APP_EventHandler(EVNT_Handle event) {
   case EVNT_STARTUP:
     break;
   case EVNT_SW1_PRESSED:
-	  LED1_Neg();
+	  CLS1_SendStr("Button 1 pressed\n", CLS1_GetStdio()->stdOut);
     break;
+#if PL_LOCAL_CONFIG_BOARD_IS_REMOTE
+  case EVNT_SW2_PRESSED:
+	  CLS1_SendStr("Button 2 pressed\n", CLS1_GetStdio()->stdOut);
+    break;
+  case EVNT_SW3_PRESSED:
+	  CLS1_SendStr("Button 3 pressed\n", CLS1_GetStdio()->stdOut);
+    break;
+  case EVNT_SW4_PRESSED:
+	  CLS1_SendStr("Button 4 pressed\n", CLS1_GetStdio()->stdOut);
+    break;
+  case EVNT_SW5_PRESSED:
+	  CLS1_SendStr("Button 5 pressed\n", CLS1_GetStdio()->stdOut);
+    break;
+  case EVNT_SW6_PRESSED:
+	  CLS1_SendStr("Button 6 pressed\n", CLS1_GetStdio()->stdOut);
+    break;
+  case EVNT_SW7_PRESSED:
+	  CLS1_SendStr("Button 7 pressed\n", CLS1_GetStdio()->stdOut);
+    break;
+#endif
   default:
     break;
    } /* switch */
@@ -149,6 +169,7 @@ void APP_Start(void) {
 	  //#Lab 16 Console
 	  WAIT1_Waitms(100);
 	  CLS1_SendStr("Hello World\n", CLS1_GetStdio()->stdOut);
+	  KEY_Scan();
 	#elif PL_LOCAL_CONFIG_BOARD_IS_REMOTE
 	  //#Lab 15 Keys
 	  //WAIT1_Waitms(50);		//polling time
@@ -157,6 +178,7 @@ void APP_Start(void) {
 	  //#Lab 16 Console
 	  WAIT1_Waitms(100);
 	  CLS1_SendStr("Hello World\n", CLS1_GetStdio()->stdOut);
+	  KEY_Scan();
 	#else
 	  #error "One board type has to be defined in Platform_Local.h!"
 	#endif
