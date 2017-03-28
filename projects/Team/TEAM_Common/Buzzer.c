@@ -28,6 +28,8 @@ typedef struct {
   int ms; /* milliseconds */
 } BUZ_Tune;
 
+//Für eine Pause kann man freq = 0 setzen für eine bestimme Anzahl ms
+//{0,1000} --> 1Sekunde Pause
 static const BUZ_Tune MelodyWelcome[] =
 { /* freq, ms */
     {300,500},
