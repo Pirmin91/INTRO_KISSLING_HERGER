@@ -24,11 +24,11 @@ static TRG_TriggerDesc TRG_Triggers[TRG_NOF_TRIGGERS];  /*!< Array of triggers *
 uint8_t TRG_SetTrigger(TRG_TriggerKind trigger, TRG_TriggerTime ticks, TRG_Callback callback, TRG_CallBackDataPtr data) {
   CS1_CriticalVariable()
   
-  CS1_EnterCritical();
+  CS1_EnterCritical();	//for reentrancy
   TRG_Triggers[trigger].ticks = ticks;
   TRG_Triggers[trigger].callback = callback;
   TRG_Triggers[trigger].data = data;
-  CS1_ExitCritical();
+  CS1_ExitCritical();	//for reentrancy
   return ERR_OK;
 }
 

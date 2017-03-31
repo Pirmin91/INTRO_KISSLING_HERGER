@@ -38,7 +38,7 @@
 #include "LEDPin2.h"
 #include "BitIoLdd2.h"
 #include "SW1.h"
-#include "BitIoLdd3.h"
+#include "ExtIntLdd1.h"
 #include "CLS1.h"
 #include "FRTOS1.h"
 #include "RTOSCNTRLDD1.h"
@@ -230,6 +230,20 @@ void PTRC1_OnTraceWrap(void);
 ** ===================================================================
 */
 void QuadInt_OnInterrupt(void);
+
+void SW1_OnInterrupt(void);
+/*
+** ===================================================================
+**     Event       :  SW1_OnInterrupt (module Events)
+**
+**     Component   :  SW1 [ExtInt]
+**     Description :
+**         This event is called when an active signal edge/level has
+**         occurred.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
 
 /* END Events */
 

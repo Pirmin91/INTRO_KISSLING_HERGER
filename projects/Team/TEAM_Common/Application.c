@@ -49,15 +49,15 @@ void APP_EventHandler(EVNT_Handle event) {
   switch(event) {
   case EVNT_STARTUP:
     break;
-  case EVNT_SW1_PRESSED:
-	  CLS1_SendStr("Button 1 pressed\n", CLS1_GetStdio()->stdOut);
-    break;
   case EVNT_LED_HEARTBEAT:
 	  LEDPin1_NegVal();
 		#if PL_LOCAL_CONFIG_BOARD_IS_ROBO
 		  LEDPin2_NegVal();;
 		#endif
 	break;
+  case EVNT_SW1_PRESSED:
+	  CLS1_SendStr("Button 1 pressed\n", CLS1_GetStdio()->stdOut);
+    break;
 #if PL_LOCAL_CONFIG_BOARD_IS_REMOTE
   case EVNT_SW2_PRESSED:
 	  CLS1_SendStr("Button 2 pressed\n", CLS1_GetStdio()->stdOut);

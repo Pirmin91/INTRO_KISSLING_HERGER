@@ -23,14 +23,22 @@
 void TMR_OnInterrupt(void) {
   /* this one gets called from an interrupt!!!! */
   /*! \todo Add code for a blinking LED here */
+
+//#Lab 13 Events
+#if PL_CONFIG_HAS_EVENTS
 	static unsigned int cntr = 0;
 	#define BLINK_PERIOD_MS 1000	//Blinkperiode --> 1 Sekunde
 	cntr++;
-#if PL_CONFIG_HAS_EVENTS
 	if((cntr%(BLINK_PERIOD_MS/TMR_TICK_MS))==0){	/* every Blink_Period_Ms (see define) */
 		EVNT_SetEvent(EVNT_LED_HEARTBEAT);
 	}
 #endif
+
+//#Lab 17 Trigger
+#if PL_CONFIG_HAS_TRIGGER
+	TRG_AddTick();		//Dem Trigger einen Tick hinzufügen
+#endif
+
 }
 void TMR_Init(void) {
 }
