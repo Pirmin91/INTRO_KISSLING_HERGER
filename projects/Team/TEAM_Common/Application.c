@@ -52,6 +52,12 @@ void APP_EventHandler(EVNT_Handle event) {
   case EVNT_SW1_PRESSED:
 	  CLS1_SendStr("Button 1 pressed\n", CLS1_GetStdio()->stdOut);
     break;
+  case EVNT_LED_HEARTBEAT:
+	  LEDPin1_NegVal();
+		#if PL_LOCAL_CONFIG_BOARD_IS_ROBO
+		  LEDPin2_NegVal();;
+		#endif
+	break;
 #if PL_LOCAL_CONFIG_BOARD_IS_REMOTE
   case EVNT_SW2_PRESSED:
 	  CLS1_SendStr("Button 2 pressed\n", CLS1_GetStdio()->stdOut);
@@ -162,30 +168,34 @@ void APP_Start(void) {
   for(;;) {
 	/* check local platform configuration */
 	#if PL_LOCAL_CONFIG_BOARD_IS_ROBO
-	  //#Lab 15 Keys
-	  //WAIT1_Waitms(50);		//polling time
-	  //Polling Key
-	  //KEY_Scan();
-	  //#Lab 16 Console
-	  WAIT1_Waitms(100);
-	  CLS1_SendStr("Hello World\n", CLS1_GetStdio()->stdOut);
-	  KEY_Scan();
-	#elif PL_LOCAL_CONFIG_BOARD_IS_REMOTE
+
 	  //#Lab 15 Keys
 	  //WAIT1_Waitms(50);		//polling time
 	  //Polling Key
 	  //KEY_Scan();
 
 	  //#Lab 16 Console
-	  WAIT1_Waitms(100);
-	  CLS1_SendStr("Hello World\n", CLS1_GetStdio()->stdOut);
-	  KEY_Scan();
+	  //WAIT1_Waitms(100);
+	  //CLS1_SendStr("Hello World\n", CLS1_GetStdio()->stdOut);
+	  //KEY_Scan();
+
+	#elif PL_LOCAL_CONFIG_BOARD_IS_REMOTE
+
+	  //#Lab 15 Keys
+	  //WAIT1_Waitms(50);		//polling time
+	  //Polling Key
+	  //KEY_Scan();
+
+	  //#Lab 16 Console
+	  //WAIT1_Waitms(100);
+	  //CLS1_SendStr("Hello World\n", CLS1_GetStdio()->stdOut);
+	  //KEY_Scan();
+
 	#else
 	  #error "One board type has to be defined in Platform_Local.h!"
 	#endif
-    //WAIT1_Waitms(100); /* just wait for some arbitrary time .... */
-    //LED1_Neg();
-    EVNT_HandleEvent(APP_EventHandler, TRUE);
+
+    EVNT_HandleEvent(APP_EventHandler, TRUE);	//Eventhandler aufrufen
   }
 #endif
 }

@@ -39,6 +39,9 @@
 #include "CLS1.h"
 #include "FRTOS1.h"
 #include "RTOSCNTRLDD1.h"
+#include "TI1.h"
+#include "TimerIntLdd1.h"
+#include "TU1.h"
 #include "RTT1.h"
 #include "SYS1.h"
 #include "LED_IR.h"
@@ -121,6 +124,7 @@ int main(void)
   /* Write your code here */
   /* For example: for(;;) { } */
   //for(;;) {
+
 	  /* Lab #10 Synchronization */
 	  //WAIT1_Waitms(1000);
 	  //LEDPin1_NegVal();
@@ -129,6 +133,7 @@ int main(void)
 	  /* Lab #12  Hard Faults */
 	  //void (*f)(void) = NULL;  /* Deklaration Funktionspointer mit NULL Referenz */
 	  //f(); 	/* will cause a hard fault, as the function pointer is NULL */
+
   //}
 
   /*** Don't write any code pass this line, or it will be deleted during code generation. ***/

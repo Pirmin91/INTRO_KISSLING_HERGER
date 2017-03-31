@@ -29,7 +29,8 @@ static EVNT_MemUnit EVNT_Events[((EVNT_NOF_EVENTS-1)/EVNT_MEM_UNIT_NOF_BITS)+1];
 
 void EVNT_SetEvent(EVNT_Handle event) {
 	/*! \todo Make it reentrant */
-	  CS1_CriticalVariable()
+	  CS1_CriticalVariable()	//Kein Semikolon, da es im #define schon ist
+			  	  	  	  	  	//für mehr Infos F3 auf Funktion
 
 	  CS1_EnterCritical();
 	  SET_EVENT(event);
@@ -54,7 +55,6 @@ bool EVNT_EventIsSet(EVNT_Handle event) {
 	  res = GET_EVENT(event);
 	  CS1_ExitCritical();
 	  return res;
-	  // return GET_EVENT(event);
 }
 
 bool EVNT_EventIsSetAutoClear(EVNT_Handle event) {
@@ -66,6 +66,7 @@ bool EVNT_EventIsSetAutoClear(EVNT_Handle event) {
   if (res) {
     CLR_EVENT(event); /* automatically clear event */
   }
+  CS1_ExitCritical();
   return res;
 }
 
@@ -83,6 +84,7 @@ void EVNT_HandleEvent(void (*callback)(EVNT_Handle), bool clearEvent) {
        break; /* get out of loop */
      }
    }
+   CS1_ExitCritical();
    if (event != EVNT_NOF_EVENTS) {
      callback(event);
      /* Note: if the callback sets the event, we will get out of the loop.
