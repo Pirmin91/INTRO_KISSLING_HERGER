@@ -48,6 +48,9 @@ void APP_EventHandler(EVNT_Handle event) {
   /*! \todo handle events */
   switch(event) {
   case EVNT_STARTUP:
+#if PL_CONFIG_HAS_BUZZER
+	  (void)BUZ_PlayTune(BUZ_TUNE_WELCOME);
+#endif
     break;
   case EVNT_LED_HEARTBEAT:
 	  LEDPin1_NegVal();
@@ -57,6 +60,9 @@ void APP_EventHandler(EVNT_Handle event) {
 	break;
   case EVNT_SW1_PRESSED:
 	  CLS1_SendStr("Button 1 pressed\n", CLS1_GetStdio()->stdOut);
+#if PL_CONFIG_HAS_BUZZER
+	  (void)BUZ_PlayTune(BUZ_TUNE_BUTTON);
+#endif
     break;
 #if PL_LOCAL_CONFIG_BOARD_IS_REMOTE
   case EVNT_SW2_PRESSED:

@@ -13,7 +13,7 @@
 #if PL_CONFIG_HAS_TIMER
 
 /*! \todo Check timer tick frequency */
-#define TMR_TICK_MS  10		//Wenn in Timerkomponente Interruptfrequenz geändert wird
+#define TMR_TICK_MS  1		//Wenn in Timerkomponente Interruptfrequenz geändert wird
 							//--> auch hier ändern!!
   /*!< we get called every TMR_TICK_MS ms */
 
