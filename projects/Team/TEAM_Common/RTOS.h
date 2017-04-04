@@ -17,6 +17,9 @@ void RTOS_Init(void);
 /*! \brief De-Initializes the RTOS module */
 void RTOS_Deinit(void);
 
+//Prototype für Main Task
+static void MainTask(void *pvParameters);
+
 #endif /* PL_CONFIG_HAS_RTOS */
 
 #endif /* RTOS_H_ */
