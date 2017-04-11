@@ -11,6 +11,23 @@
 /* User includes (#include below this line is not maintained by Processor Expert) */
 #include "LED.h"
 
+// Functions for Lab 21
+//static void Task2(void *pvParameters)
+//{
+//	for(;;)
+//	{
+//		vTaskDelay(10/portTICK_PERIOD_MS); // Wenn beide Task ein TaskDelay haben -> 100% Runtime bei IDLE
+//	}
+//}
+
+//static void Task1(void *pvParameters)
+//{
+//	for(;;)
+//	{
+//		vTaskDelay(100/portTICK_PERIOD_MS); // Aus diesem Grund wird nur noch Task2 laufen (Runtime 100%), falls Task2 kein TaskDelay hat
+//	}
+//}
+
 void RTOS_Init(void) {
   /*! \todo Create tasks here */
 	//Create main task
@@ -18,6 +35,17 @@ void RTOS_Init(void) {
 	xTaskHandle taskHndl ;
 	res = xTaskCreate(MainTask,"Main",configMINIMAL_STACK_SIZE+50 /*1kByte Stack*/,
 		(void*)NULL,tskIDLE_PRIORITY+1 /*um eins höhere Prio als idle task*/,&taskHndl);
+
+	// Lab 21 (create Tasks)
+
+	// Task 1
+	//res = xTaskCreate(Task1, "Task1",configMINIMAL_STACK_SIZE+50 /*1kByte Stack*/,
+	//		(void*)NULL,tskIDLE_PRIORITY+1 /*um eins höhere Prio als idle task*/,&taskHndl);
+
+	// Task 2
+	//res = xTaskCreate(Task2, "Task2",configMINIMAL_STACK_SIZE+50 /*1kByte Stack*/,
+	//		(void*)NULL,tskIDLE_PRIORITY+1/*um eins höhere Prio als idle task*/,&taskHndl);
+
 
 	//error handling /*! \todo do Error Handling here */
 	//if ( res!=pdPASS) {
