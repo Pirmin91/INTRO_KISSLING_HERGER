@@ -10,6 +10,7 @@
 #include "FRTOS1.h"
 /* User includes (#include below this line is not maintained by Processor Expert) */
 #include "LED.h"
+#include "Application.h"
 
 // Functions for Lab 21
 //static void Task2(void *pvParameters)
@@ -65,6 +66,8 @@ static void MainTask(void *pvParameters) {
 		LEDPin2_NegVal();
 #endif
 		vTaskDelay(200/portTICK_PERIOD_MS);		//200ms Blinkperiode
+
+		EVNT_HandleEvent(APP_EventHandler, TRUE);	//Eventhandler aufrufen
 	}
 }
 

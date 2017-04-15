@@ -203,7 +203,7 @@ static DBNC_FSMData KEYDBNC_FSMdata = {
   0, /* key scan value */
   0, /* long key count */
   TRG_KEYPRESS, /* trigger to be used */
-  (50/TRG_TICKS_MS), /* debounceTicks */
+  (50/TRG_TICKS_MS), /*debounceTicks */
   (500/TRG_TICKS_MS), /* longKeyTicks for x ms */
 };
 
