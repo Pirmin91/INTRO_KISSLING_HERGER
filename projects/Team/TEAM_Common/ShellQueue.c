@@ -34,9 +34,9 @@ void SQUEUE_SendString(const unsigned char *str) {
   unsigned char *ptr;
   size_t bufSize;
 
-  bufSize = UTIL1_strlen(str)+1;
-  ptr = pvPortMalloc(bufSize);
-  UTIL1_strcpy(ptr, bufSize, str);
+  bufSize = UTIL1_strlen(str)+1; //Buffer Grösse ist um 1 erhöht, da bei jeder Message (String) am Ende ein \0
+  ptr = pvPortMalloc(bufSize);	//Alloziert Speicher auf dem Heap in Grösse der Buffer Size
+  UTIL1_strcpy(ptr, bufSize, str); //Inhalt des Strings wird in Pointer geschrieben --> copy the message
   if (xQueueSendToBack(SQUEUE_Queue, &ptr, portMAX_DELAY)!=pdPASS) {
     for(;;){} /* ups? */
   }
@@ -84,6 +84,6 @@ void SQUEUE_Init(void) {
   if (SQUEUE_Queue==NULL) {
     for(;;){} /* out of memory? */
   }
-  vQueueAddToRegistry(SQUEUE_Queue, "ShellQueue");
+  vQueueAddToRegistry(SQUEUE_Queue, "ShellQueue");  //um die Queue in dem Debugger zu sehen
 }
 #endif /* PL_CONFIG_HAS_SHELL_QUEUE */
