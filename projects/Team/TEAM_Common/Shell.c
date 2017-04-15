@@ -84,7 +84,7 @@
 #include "TmDt1.h"
 
 #if CLS1_DEFAULT_SERIAL
-  //#error "Default is RTT. Disable any Shell default connection in the component properties, as we are setting it a runtime!"
+  #error "Default is RTT. Disable any Shell default connection in the component properties, as we are setting it a runtime!"
 #endif
 #define SHELL_CONFIG_HAS_EXTRA_UART  (1 && PL_CONFIG_BOARD_IS_ROBO_V2) /* use AsynchroSerial */
 #define SHELL_CONFIG_HAS_SHELL_RTT   (1) /* use SEGGER RTT */
