@@ -52,12 +52,12 @@ void APP_EventHandler(EVNT_Handle event) {
 	  (void)BUZ_PlayTune(BUZ_TUNE_WELCOME);
 #endif
     break;
-  case EVNT_LED_HEARTBEAT:
-	  LEDPin1_NegVal();
-		#if PL_LOCAL_CONFIG_BOARD_IS_ROBO
-		  LEDPin2_NegVal();;
-		#endif
-	break;
+//  case EVNT_LED_HEARTBEAT:
+//	  LEDPin1_NegVal();
+//		#if PL_LOCAL_CONFIG_BOARD_IS_ROBO
+//		  LEDPin2_NegVal();;
+//		#endif
+//	break;
   case EVNT_SW1_PRESSED:
 	  CLS1_SendStr("Button 1 pressed\n", CLS1_GetStdio()->stdOut);
 #if PL_CONFIG_HAS_BUZZER
