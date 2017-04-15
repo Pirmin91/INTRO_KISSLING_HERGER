@@ -41,11 +41,10 @@ void RTOS_Init(void) {
 		/*! \todo do Error Handling here */
 	}
 
-	// Lab 21 (create Tasks)
-
+	// Lab 21 (Tasks)
 	// Task 1
 	//res = xTaskCreate(Task1, "Task1",configMINIMAL_STACK_SIZE+50 /*1kByte Stack*/,
-	//		(void*)NULL,tskIDLE_PRIORITY+1 /*um eins höhere Prio als idle task*/,&taskHndl);
+	//		(void*)NULL,tskIDLE_PRIORITY /*Prio wie idle task*/,&taskHndl);
 	//error handling
 	//if ( res!=pdPASS) {
 		/*! \todo do Error Handling here */
@@ -53,7 +52,7 @@ void RTOS_Init(void) {
 
 	// Task 2
 	//res = xTaskCreate(Task2, "Task2",configMINIMAL_STACK_SIZE+50 /*1kByte Stack*/,
-	//		(void*)NULL,tskIDLE_PRIORITY+1/*um eins höhere Prio als idle task*/,&taskHndl);
+	//		(void*)NULL,tskIDLE_PRIORITY /*Prio wie idle task*/,&taskHndl);
 	//error handling
 	//if ( res!=pdPASS) {
 		/*! \todo do Error Handling here */
