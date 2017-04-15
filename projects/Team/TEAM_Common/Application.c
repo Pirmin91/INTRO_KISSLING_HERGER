@@ -64,6 +64,12 @@ void APP_EventHandler(EVNT_Handle event) {
 	  (void)BUZ_PlayTune(BUZ_TUNE_BUTTON);
 #endif
     break;
+  case EVNT_SW1_LPRESSED:
+	  CLS1_SendStr("Button 1 LongPressed\n", CLS1_GetStdio()->stdOut);
+	  break;
+  case EVNT_SW1_RELEASED:
+	  CLS1_SendStr("Button 1 Released\n", CLS1_GetStdio()->stdOut);
+	  break;
 #if PL_LOCAL_CONFIG_BOARD_IS_REMOTE
   case EVNT_SW2_PRESSED:
 	  CLS1_SendStr("Button 2 pressed\n", CLS1_GetStdio()->stdOut);
@@ -196,6 +202,10 @@ void APP_Start(void) {
 	  //WAIT1_Waitms(100);
 	  //CLS1_SendStr("Hello World\n", CLS1_GetStdio()->stdOut);
 	  //KEY_Scan();
+
+	  //#Lab 18 Debouncing
+	  // Polling Key
+	  KEYDBNC_Process(); // Falls ein Button gedrückt wird, wird mit dieser Funktion entprellt
 
 	#else
 	  #error "One board type has to be defined in Platform_Local.h!"
