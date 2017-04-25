@@ -1,0 +1,6 @@
+Mutex, Semaphore, vTaskSuspendAll -> interrupts are still running
+taskEnterCritical -> Cortex M4, BASEPRI (higher Prio Interrupts still can run)
+-> Use EnterCritical()
+
+How to implement an timeout?
+-> check the timer (Start Timer) if this takes longer than e.g. 5ms than...
