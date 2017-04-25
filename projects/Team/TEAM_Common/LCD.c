@@ -18,7 +18,9 @@
 #include "LCD_LED.h"
 #include "Event.h"
 #include "FRTOS1.h"
-#include "RApp.h"
+#if PL_CONFIG_HAS_RADIO //Lab 28: at the moment there is no Radio-Module
+  #include "RApp.h"
+#endif
 #include "LCDMenu.h"
 /*! \todo Add additional includes as needed */
 
@@ -109,15 +111,41 @@ static void ShowTextOnLCD(unsigned char *text) {
   GDisp1_UpdateFull();
 }
 
+static void DrawFont(void) {
+  FDisp1_PixelDim x, y;
+
+  GDisp1_Clear();
+  GDisp1_UpdateFull();
+  x = 0;
+  y = 10;
+  FDisp1_WriteString("TextOnDisplay!", GDisp1_COLOR_BLACK, &x, &y, GFONT1_GetFont());
+  GDisp1_UpdateFull();
+  vTaskDelay(pdMS_TO_TICKS(500));
+  x = 0;
+  y += GFONT1_GetBoxHeight();
+  FDisp1_WriteString("Lab 29!", GDisp1_COLOR_BLACK, &x, &y, GFONT1_GetFont());
+  GDisp1_UpdateFull();
+  WAIT1_Waitms(1000);
+}
+
+static void DrawText(void) {
+  GDisp1_Clear();
+  GDisp1_UpdateFull();
+  PDC1_WriteLineStr(1, "Segment_1");
+  vTaskDelay(pdMS_TO_TICKS(2000));
+  PDC1_WriteLineStr(2, "Segment_2");
+  vTaskDelay(pdMS_TO_TICKS(2000));
+}
+
 static void LCD_Task(void *param) {
   (void)param; /* not used */
-#if 0
+#if 1
   ShowTextOnLCD("Press a key!");
   DrawText();
   /* \todo extend */
   DrawFont();
-  DrawLines(); /*! \todo */
-  DrawCircles();
+  //DrawLines(); /*! \todo */
+  //DrawCircles();
 #endif
 #if PL_CONFIG_HAS_LCD_MENU
   LCDMenu_InitMenu(menus, sizeof(menus)/sizeof(menus[0]), 1);
