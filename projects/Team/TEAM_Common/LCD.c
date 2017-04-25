@@ -18,8 +18,9 @@
 #include "LCD_LED.h"
 #include "Event.h"
 #include "FRTOS1.h"
-#if PL_CONFIG_HAS_RADIO //Lab 28: at the moment there is no Radio-Module
-  #include "RApp.h"
+//#if PL_CONFIG_HAS_RADIO //Lab 28: at the moment there is no Radio-Module
+//  #include "RApp.h"
+//#endif
 #endif
 #include "LCDMenu.h"
 /*! \todo Add additional includes as needed */
@@ -89,16 +90,17 @@ static const LCDMenu_MenuItem menus[] =
       {LCD_MENU_ID_NUM_VALUE,                 1,   1,   LCD_MENU_ID_MAIN,         LCD_MENU_ID_NONE,                 NULL,           ValueChangeHandler,           LCDMENU_MENU_FLAGS_EDITABLE},
 };
 
-uint8_t LCD_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *data, RNWK_ShortAddrType srcAddr, bool *handled, RPHY_PacketDesc *packet) {
-  (void)size;
-  (void)packet;
-  switch(type) {
-     default:
-      break;
-  } /* switch */
-  return ERR_OK;
-}
-#endif /* PL_CONFIG_HAS_LCD_MENU */
+// Lab 29: there is no Radio-Module at the moment (reason of comment the function)
+//uint8_t LCD_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *data, RNWK_ShortAddrType srcAddr, bool *handled, RPHY_PacketDesc *packet) {
+ // (void)size;
+ // (void)packet;
+//  switch(type) {
+ //    default:
+ //     break;
+//  } /* switch */
+ // return ERR_OK;
+//}
+//#endif /* PL_CONFIG_HAS_LCD_MENU */
 
 
 static void ShowTextOnLCD(unsigned char *text) {
