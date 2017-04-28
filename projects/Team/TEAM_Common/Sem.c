@@ -25,7 +25,7 @@ static SemaphoreHandle_t xSemaphore;
 static void vSlaveTask(void *pvParameters) {
 	while(xSemaphore == NULL)
 	{
-		vTaskDelay(10);	// wait 10ms
+		vTaskDelay(100/portTICK_PERIOD_MS);	// wait 10ms
 	}
    for(;;) {
     /*! \todo Implement functionality */
@@ -39,7 +39,7 @@ static void vMasterTask(void *pvParameters) {
   /*! \todo send semaphore from master task to slave task */
 	while(xSemaphore == NULL)
 	{
-		vTaskDelay(10);	// wait 10ms
+		vTaskDelay(100/portTICK_PERIOD_MS);	// wait 10ms
 	}
   for(;;) {
     /*! \todo Implement functionality */
@@ -59,8 +59,13 @@ void SEM_Init(void)
 	if (xSemaphore == NULL)
 	{
 		// Failed! not enough heap memory! FOLIE 90
+		for(;;)
+		{
+
+		}
 	}
 	else {
+		  vQueueAddToRegistry(xSemaphore, "IPC_Sem");
 			// Master -> function above
 			if (xTaskCreate(vMasterTask, "Master", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL) != pdPASS) {
 				for(;;){} /* error */
