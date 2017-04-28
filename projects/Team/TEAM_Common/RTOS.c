@@ -67,9 +67,9 @@ void RTOS_Deinit(void) {
 static void MainTask(void *pvParameters) {
 	for(;;) {
 		//Blinking an LED
-		LEDPin1_NegVal();
+		//LEDPin1_NegVal();
 #if PL_LOCAL_CONFIG_BOARD_IS_ROBO
-		LEDPin2_NegVal();
+		//LEDPin2_NegVal();
 #endif
 		vTaskDelay(200/portTICK_PERIOD_MS);		//200ms Blinkperiode
 

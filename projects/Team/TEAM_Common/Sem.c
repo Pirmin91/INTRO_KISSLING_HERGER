@@ -72,7 +72,7 @@ void SEM_Init(void)
 			}
 
 			// Slave -> function above
-			if (xTaskCreate(vMasterTask, "Slave", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL) != pdPASS) {
+			if (xTaskCreate(vSlaveTask, "Slave", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL) != pdPASS) {
 				for(;;){} /* error */
 			}
 	}
