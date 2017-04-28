@@ -107,10 +107,13 @@ static void ShowTextOnLCD(unsigned char *text) {
   FDisp1_PixelDim x, y;
 
   GDisp1_Clear();
+  GDisp1_UpdateFull();
   x = 0;
   y = 10;
   FDisp1_WriteString(text, GDisp1_COLOR_BLACK, &x, &y, GFONT1_GetFont());
   GDisp1_UpdateFull();
+  vTaskDelay(pdMS_TO_TICKS(1000));
+
 }
 
 static void DrawFont(void) {
@@ -118,6 +121,7 @@ static void DrawFont(void) {
 
   GDisp1_Clear();
   GDisp1_UpdateFull();
+
   x = 0;
   y = 10;
   FDisp1_WriteString("TextOnDisplay!", GDisp1_COLOR_BLACK, &x, &y, GFONT1_GetFont());
@@ -143,9 +147,20 @@ static void LCD_Task(void *param) {
   (void)param; /* not used */
 #if 1
   ShowTextOnLCD("Press a key!");
+  vTaskDelay(pdMS_TO_TICKS(1000));
   DrawText();
   /* \todo extend */
   DrawFont();
+
+  // Lab 28 draw line and circle, set pixel
+  GDisp1_Clear();
+  GDisp1_UpdateFull();
+  GDisp1_SetPixel(0,GDisp1_GetHeight()-1); // Achtung: GetHeight()-1
+  GDisp1_DrawLine(0,0,GDisp1_GetWidth(),GDisp1_GetHeight(),GDisp1_COLOR_BLACK);
+  GDisp1_DrawCircle(GDisp1_GetWidth()/2,GDisp1_GetHeight()/2, 10,GDisp1_COLOR_BLACK);
+  GDisp1_UpdateFull();
+  vTaskDelay(pdMS_TO_TICKS(3000));
+
   //DrawLines(); /*! \todo */
   //DrawCircles();
 #endif
