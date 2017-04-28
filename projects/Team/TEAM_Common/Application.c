@@ -90,6 +90,11 @@ void APP_EventHandler(EVNT_Handle event) {
 	  CLS1_SendStr("Button 7 pressed\n", CLS1_GetStdio()->stdOut);
     break;
 #endif
+#if PL_LOCAL_CONFIG_HAS_LCD
+  case LCD_BTN_LEFT:
+
+	  break;
+#endif
   default:
     break;
    } /* switch */

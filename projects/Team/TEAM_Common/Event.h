@@ -55,6 +55,16 @@ typedef enum EVNT_Handle {
   EVNT_SW7_LPRESSED,
   #endif
 #endif
+#if PL_CONFIG_HAS_LCD
+  /* button press events */
+  EVNT_LCD_BTN_LEFT,
+  EVNT_LCD_BTN_RIGHT,
+  EVNT_LCD_BTN_UP,
+  EVNT_LCD_BTN_DOWN,
+  EVNT_LCD_BTN_CENTER,
+  EVNT_LCD_SIDE_BTN_UP,
+  EVNT_LCD_SIDE_BTN_DOWN,
+#endif
   /*!< \todo Your extra events here */
   EVNT_NOF_EVENTS       /*!< Must be last one! */
 } EVNT_Handle;

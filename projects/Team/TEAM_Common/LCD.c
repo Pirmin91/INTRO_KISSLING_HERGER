@@ -25,6 +25,7 @@
 #include "LCDMenu.h"
 /*! \todo Add additional includes as needed */
 
+
 /* status variables */
 static bool LedBackLightisOn = TRUE;
 static bool remoteModeIsOn = FALSE;
@@ -137,29 +138,37 @@ static void DrawFont(void) {
 static void DrawText(void) {
   GDisp1_Clear();
   GDisp1_UpdateFull();
-  PDC1_WriteLineStr(1, "Segment_1");
+  /*PDC1_WriteLineStr(1, "Segment_1");
   vTaskDelay(pdMS_TO_TICKS(2000));
   PDC1_WriteLineStr(2, "Segment_2");
+  vTaskDelay(pdMS_TO_TICKS(2000));*/
+  PDC1_WriteLineStr(1, "Welcome to Remote");
+  PDC1_WriteLineStr(2, "INTRO FS17");
   vTaskDelay(pdMS_TO_TICKS(2000));
+  //GDisp1_UpdateFull();
 }
 
 static void LCD_Task(void *param) {
   (void)param; /* not used */
 #if 1
-  ShowTextOnLCD("Press a key!");
-  vTaskDelay(pdMS_TO_TICKS(1000));
-  DrawText();
+  //ShowTextOnLCD("Press a key!");
+  //vTaskDelay(pdMS_TO_TICKS(1000));
+  //DrawText();	//Welcome Text
   /* \todo extend */
-  DrawFont();
+  //DrawFont();
+
+  //Welcome Text
+  ShowTextOnLCD("Welcome to Remote!");
+  vTaskDelay(pdMS_TO_TICKS(2000));
 
   // Lab 28 draw line and circle, set pixel
-  GDisp1_Clear();
+  /*GDisp1_Clear();
   GDisp1_UpdateFull();
   GDisp1_SetPixel(0,GDisp1_GetHeight()-1); // Achtung: GetHeight()-1
   GDisp1_DrawLine(0,0,GDisp1_GetWidth(),GDisp1_GetHeight(),GDisp1_COLOR_BLACK);
   GDisp1_DrawCircle(GDisp1_GetWidth()/2,GDisp1_GetHeight()/2, 10,GDisp1_COLOR_BLACK);
   GDisp1_UpdateFull();
-  vTaskDelay(pdMS_TO_TICKS(3000));
+  vTaskDelay(pdMS_TO_TICKS(3000));*/
 
   //DrawLines(); /*! \todo */
   //DrawCircles();
@@ -179,34 +188,34 @@ static void LCD_Task(void *param) {
       requestLCDUpdate = FALSE;
       LCDMenu_OnEvent(LCDMENU_EVENT_DRAW, NULL);
     }
-#if 0 /*! \todo Change this to for your own needs, or use direct task notification */
+#if 1 /*! \todo Change this to for your own needs, or use direct task notification */
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_LEFT)) { /* left */
-      LCDMenu_OnEvent(LCDMENU_EVENT_LEFT, NULL);
-//      ShowTextOnLCD("left");
+      //LCDMenu_OnEvent(LCDMENU_EVENT_LEFT, NULL);
+      ShowTextOnLCD("left");
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_RIGHT)) { /* right */
-      LCDMenu_OnEvent(LCDMENU_EVENT_RIGHT, NULL);
-//      ShowTextOnLCD("right");
+      //LCDMenu_OnEvent(LCDMENU_EVENT_RIGHT, NULL);
+      ShowTextOnLCD("right");
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_UP)) { /* up */
-      LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
-//      ShowTextOnLCD("up");
+    	//LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
+      ShowTextOnLCD("up");
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_DOWN)) { /* down */
-      LCDMenu_OnEvent(LCDMENU_EVENT_DOWN, NULL);
-//      ShowTextOnLCD("down");
+    	//LCDMenu_OnEvent(LCDMENU_EVENT_DOWN, NULL);
+      ShowTextOnLCD("down");
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_CENTER)) { /* center */
-      LCDMenu_OnEvent(LCDMENU_EVENT_ENTER, NULL);
-//      ShowTextOnLCD("center");
+    	//LCDMenu_OnEvent(LCDMENU_EVENT_ENTER, NULL);
+      ShowTextOnLCD("center");
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_SIDE_BTN_UP)) { /* side up */
-      LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
-//      ShowTextOnLCD("side up");
+    	//LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
+      ShowTextOnLCD("side up");
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_SIDE_BTN_DOWN)) { /* side down */
-      LCDMenu_OnEvent(LCDMENU_EVENT_DOWN, NULL);
-//      ShowTextOnLCD("side down");
+    	//LCDMenu_OnEvent(LCDMENU_EVENT_DOWN, NULL);
+      ShowTextOnLCD("side down");
     }
 #endif
 #endif /* PL_CONFIG_HAS_LCD_MENU */

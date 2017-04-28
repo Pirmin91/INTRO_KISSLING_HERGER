@@ -71,6 +71,9 @@ static void MainTask(void *pvParameters) {
 #if PL_LOCAL_CONFIG_BOARD_IS_ROBO
 		//LEDPin2_NegVal();
 #endif
+		//vTaskDelay(200/portTICK_PERIOD_MS);		//200ms Blinkperiode
+		//Lab 28 Key Polling für LCD Anzeige
+		KEY_Scan();
 		vTaskDelay(200/portTICK_PERIOD_MS);		//200ms Blinkperiode
 
 		EVNT_HandleEvent(APP_EventHandler, TRUE);	//Eventhandler aufrufen
