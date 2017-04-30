@@ -37,6 +37,13 @@ typedef enum {
   LCD_MENU_ID_MAIN,
     LCD_MENU_ID_BACKLIGHT,
     LCD_MENU_ID_NUM_VALUE,
+  //eigene Menu IDs
+  LCD_MENU_ID_ROBOT,
+  LCD_MENU_ID_PID,
+  LCD_MENU_ID_P_VALUE,
+  LCD_MENU_ID_I_VALUE,
+  LCD_MENU_ID_D_VALUE,
+  LCD_MENU_ID_W_VALUE,
 } LCD_MenuIDs;
 
 static LCDMenu_StatusFlags ValueChangeHandler(const struct LCDMenu_MenuItem_ *item, LCDMenu_EventType event, void **dataP) {
@@ -84,11 +91,132 @@ static LCDMenu_StatusFlags BackLightMenuHandler(const struct LCDMenu_MenuItem_ *
   return flags;
 }
 
+//Eigene Handler für P,I,D,W Wert
+static LCDMenu_StatusFlags PChangeHandler(const struct LCDMenu_MenuItem_ *item, LCDMenu_EventType event, void **dataP) {
+	  /*Kopie von Value Changed Handler*/
+	  static int value = 0;
+	  static uint8_t valueBuf[16];
+	  LCDMenu_StatusFlags flags = LCDMENU_STATUS_FLAGS_NONE;
+
+	  (void)item;
+	  if (event==LCDMENU_EVENT_GET_TEXT) {
+	    UTIL1_strcpy(valueBuf, sizeof(valueBuf), (uint8_t*)"P: ");
+	    UTIL1_strcatNum32s(valueBuf, sizeof(valueBuf), value);
+	    *dataP = valueBuf;
+	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	  } else if (event==LCDMENU_EVENT_GET_EDIT_TEXT) {
+	    UTIL1_strcpy(valueBuf, sizeof(valueBuf), (uint8_t*)"[-] ");
+	    UTIL1_strcatNum32s(valueBuf, sizeof(valueBuf), value);
+	    UTIL1_strcat(valueBuf, sizeof(valueBuf), (uint8_t*)" [+]");
+	    *dataP = valueBuf;
+	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	  } else if (event==LCDMENU_EVENT_DECREMENT) {
+	    value--;
+	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	  } else if (event==LCDMENU_EVENT_INCREMENT) {
+	    value++;
+	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	  }
+	  return flags;
+}
+
+static LCDMenu_StatusFlags IChangeHandler(const struct LCDMenu_MenuItem_ *item, LCDMenu_EventType event, void **dataP) {
+	  /*Kopie von Value Changed Handler*/
+	  static int value = 0;
+	  static uint8_t valueBuf[16];
+	  LCDMenu_StatusFlags flags = LCDMENU_STATUS_FLAGS_NONE;
+
+	  (void)item;
+	  if (event==LCDMENU_EVENT_GET_TEXT) {
+	    UTIL1_strcpy(valueBuf, sizeof(valueBuf), (uint8_t*)"I: ");
+	    UTIL1_strcatNum32s(valueBuf, sizeof(valueBuf), value);
+	    *dataP = valueBuf;
+	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	  } else if (event==LCDMENU_EVENT_GET_EDIT_TEXT) {
+	    UTIL1_strcpy(valueBuf, sizeof(valueBuf), (uint8_t*)"[-] ");
+	    UTIL1_strcatNum32s(valueBuf, sizeof(valueBuf), value);
+	    UTIL1_strcat(valueBuf, sizeof(valueBuf), (uint8_t*)" [+]");
+	    *dataP = valueBuf;
+	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	  } else if (event==LCDMENU_EVENT_DECREMENT) {
+	    value--;
+	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	  } else if (event==LCDMENU_EVENT_INCREMENT) {
+	    value++;
+	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	  }
+	  return flags;
+}
+
+static LCDMenu_StatusFlags DChangeHandler(const struct LCDMenu_MenuItem_ *item, LCDMenu_EventType event, void **dataP) {
+	  /*Kopie von Value Changed Handler*/
+	  static int value = 0;
+	  static uint8_t valueBuf[16];
+	  LCDMenu_StatusFlags flags = LCDMENU_STATUS_FLAGS_NONE;
+
+	  (void)item;
+	  if (event==LCDMENU_EVENT_GET_TEXT) {
+	    UTIL1_strcpy(valueBuf, sizeof(valueBuf), (uint8_t*)"D: ");
+	    UTIL1_strcatNum32s(valueBuf, sizeof(valueBuf), value);
+	    *dataP = valueBuf;
+	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	  } else if (event==LCDMENU_EVENT_GET_EDIT_TEXT) {
+	    UTIL1_strcpy(valueBuf, sizeof(valueBuf), (uint8_t*)"[-] ");
+	    UTIL1_strcatNum32s(valueBuf, sizeof(valueBuf), value);
+	    UTIL1_strcat(valueBuf, sizeof(valueBuf), (uint8_t*)" [+]");
+	    *dataP = valueBuf;
+	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	  } else if (event==LCDMENU_EVENT_DECREMENT) {
+	    value--;
+	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	  } else if (event==LCDMENU_EVENT_INCREMENT) {
+	    value++;
+	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	  }
+	  return flags;
+}
+
+static LCDMenu_StatusFlags WChangeHandler(const struct LCDMenu_MenuItem_ *item, LCDMenu_EventType event, void **dataP) {
+	  /*Kopie von Value Changed Handler*/
+	  static int value = 0;
+	  static uint8_t valueBuf[16];
+	  LCDMenu_StatusFlags flags = LCDMENU_STATUS_FLAGS_NONE;
+
+	  (void)item;
+	  if (event==LCDMENU_EVENT_GET_TEXT) {
+	    UTIL1_strcpy(valueBuf, sizeof(valueBuf), (uint8_t*)"W: ");
+	    UTIL1_strcatNum32s(valueBuf, sizeof(valueBuf), value);
+	    *dataP = valueBuf;
+	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	  } else if (event==LCDMENU_EVENT_GET_EDIT_TEXT) {
+	    UTIL1_strcpy(valueBuf, sizeof(valueBuf), (uint8_t*)"[-] ");
+	    UTIL1_strcatNum32s(valueBuf, sizeof(valueBuf), value);
+	    UTIL1_strcat(valueBuf, sizeof(valueBuf), (uint8_t*)" [+]");
+	    *dataP = valueBuf;
+	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	  } else if (event==LCDMENU_EVENT_DECREMENT) {
+	    value--;
+	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	  } else if (event==LCDMENU_EVENT_INCREMENT) {
+	    value++;
+	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	  }
+	  return flags;
+}
+
 static const LCDMenu_MenuItem menus[] =
 {/* id,                                     grp, pos,   up,                       down,                             text,           callback                      flags                  */
     {LCD_MENU_ID_MAIN,                        0,   0,   LCD_MENU_ID_NONE,         LCD_MENU_ID_BACKLIGHT,            "General",      NULL,                         LCDMENU_MENU_FLAGS_NONE},
       {LCD_MENU_ID_BACKLIGHT,                 1,   0,   LCD_MENU_ID_MAIN,         LCD_MENU_ID_NONE,                 NULL,           BackLightMenuHandler,         LCDMENU_MENU_FLAGS_NONE},
       {LCD_MENU_ID_NUM_VALUE,                 1,   1,   LCD_MENU_ID_MAIN,         LCD_MENU_ID_NONE,                 NULL,           ValueChangeHandler,           LCDMENU_MENU_FLAGS_EDITABLE},
+	 //eigene Menus
+	  {LCD_MENU_ID_ROBOT,                     0,  1,   LCD_MENU_ID_NONE,          LCD_MENU_ID_PID,            		"Robot",        NULL,                         LCDMENU_MENU_FLAGS_NONE},
+	  {LCD_MENU_ID_PID,                       2,  0,   LCD_MENU_ID_ROBOT,         LCD_MENU_ID_P_VALUE,            	"PID",          NULL,                         LCDMENU_MENU_FLAGS_NONE},
+	  {LCD_MENU_ID_P_VALUE,                   3,  0,   LCD_MENU_ID_PID,           LCD_MENU_ID_NONE,            	    NULL,           PChangeHandler,               LCDMENU_MENU_FLAGS_EDITABLE},
+	  {LCD_MENU_ID_I_VALUE,                   3,  1,   LCD_MENU_ID_PID,           LCD_MENU_ID_NONE,            	    NULL,           IChangeHandler,     	      LCDMENU_MENU_FLAGS_EDITABLE},
+	  {LCD_MENU_ID_D_VALUE,                   3,  2,   LCD_MENU_ID_PID,           LCD_MENU_ID_NONE,            	    NULL,           DChangeHandler,      		  LCDMENU_MENU_FLAGS_EDITABLE},
+	  {LCD_MENU_ID_W_VALUE,                   3,  3,   LCD_MENU_ID_PID,           LCD_MENU_ID_NONE,            	    NULL,           WChangeHandler,     		  LCDMENU_MENU_FLAGS_EDITABLE},
+
 };
 
 // Lab 29: there is no Radio-Module at the moment (reason of comment the function)
@@ -158,8 +286,8 @@ static void LCD_Task(void *param) {
   //DrawFont();
 
   //Welcome Text
-  ShowTextOnLCD("Welcome to Remote!");
-  vTaskDelay(pdMS_TO_TICKS(2000));
+  ShowTextOnLCD("Welcome!");
+  vTaskDelay(pdMS_TO_TICKS(2000));	//2Sekunden lang anzeigen lassen
 
   // Lab 28 draw line and circle, set pixel
   /*GDisp1_Clear();
@@ -190,32 +318,32 @@ static void LCD_Task(void *param) {
     }
 #if 1 /*! \todo Change this to for your own needs, or use direct task notification */
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_LEFT)) { /* left */
-      //LCDMenu_OnEvent(LCDMENU_EVENT_LEFT, NULL);
-      ShowTextOnLCD("left");
+      LCDMenu_OnEvent(LCDMENU_EVENT_LEFT, NULL);
+      //ShowTextOnLCD("left");
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_RIGHT)) { /* right */
-      //LCDMenu_OnEvent(LCDMENU_EVENT_RIGHT, NULL);
-      ShowTextOnLCD("right");
+      LCDMenu_OnEvent(LCDMENU_EVENT_RIGHT, NULL);
+      //ShowTextOnLCD("right");
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_UP)) { /* up */
-    	//LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
-      ShowTextOnLCD("up");
+      LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
+      //ShowTextOnLCD("up");
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_DOWN)) { /* down */
-    	//LCDMenu_OnEvent(LCDMENU_EVENT_DOWN, NULL);
-      ShowTextOnLCD("down");
+      LCDMenu_OnEvent(LCDMENU_EVENT_DOWN, NULL);
+      //ShowTextOnLCD("down");
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_CENTER)) { /* center */
-    	//LCDMenu_OnEvent(LCDMENU_EVENT_ENTER, NULL);
-      ShowTextOnLCD("center");
+      LCDMenu_OnEvent(LCDMENU_EVENT_ENTER, NULL);
+      //ShowTextOnLCD("center");
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_SIDE_BTN_UP)) { /* side up */
-    	//LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
-      ShowTextOnLCD("side up");
+      LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
+      //ShowTextOnLCD("side up");
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_SIDE_BTN_DOWN)) { /* side down */
-    	//LCDMenu_OnEvent(LCDMENU_EVENT_DOWN, NULL);
-      ShowTextOnLCD("side down");
+      LCDMenu_OnEvent(LCDMENU_EVENT_DOWN, NULL);
+      //ShowTextOnLCD("side down");
     }
 #endif
 #endif /* PL_CONFIG_HAS_LCD_MENU */
