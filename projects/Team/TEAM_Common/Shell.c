@@ -362,6 +362,26 @@ static void ShellTask(void *pvParameters) {
     for(i=0;i<sizeof(ios)/sizeof(ios[0]);i++) {
       (void)CLS1_ReadAndParseWithCommandTable(ios[i].buf, ios[i].bufSize, ios[i].stdio, CmdParserTable);
     }
+#if PL_CONFIG_HAS_SHELL_QUEUE && PL_CONFIG_SQUEUE_SINGLE_CHAR
+    {
+        /*! \todo Handle shell queue */
+      unsigned char ch;
+
+      while((ch=SQUEUE_ReceiveChar()) && ch!='\0') {
+        SHELL_stdio.stdOut(ch);
+      }
+    }
+#elif PL_CONFIG_HAS_SHELL_QUEUE /* !PL_CONFIG_SQUEUE_SINGLE_CHAR */
+    {
+      const unsigned char *msg;
+
+      msg = SQUEUE_ReceiveMessage();
+      if (msg!=NULL) {
+        CLS1_SendStr(msg, SHELL_stdio.stdOut);
+        vPortFree((void*)msg);
+      }
+    }
+#endif /* PL_CONFIG_HAS_SHELL_QUEUE */
     vTaskDelay(pdMS_TO_TICKS(10));
   } /* for */
 }

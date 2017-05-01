@@ -203,11 +203,13 @@ static LCDMenu_StatusFlags WChangeHandler(const struct LCDMenu_MenuItem_ *item, 
 	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
 	  } else if (event==LCDMENU_EVENT_DECREMENT) {
 			if (value > 0) {
-		      value--;
+		     //value--;
+			 value-=10;
 			}
 	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
 	  } else if (event==LCDMENU_EVENT_INCREMENT) {
-	    value++;
+	    //value++;
+		value+=10;
 	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
 	  }
 	  return flags;
