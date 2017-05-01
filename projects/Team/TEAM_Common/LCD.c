@@ -94,7 +94,7 @@ static LCDMenu_StatusFlags BackLightMenuHandler(const struct LCDMenu_MenuItem_ *
 //Eigene Handler für P,I,D,W Wert
 static LCDMenu_StatusFlags PChangeHandler(const struct LCDMenu_MenuItem_ *item, LCDMenu_EventType event, void **dataP) {
 	  /*Kopie von Value Changed Handler*/
-	  static int value = 0;
+	  static int value = 0;   //aktueller P-Wert abfragen /*ToDo*/
 	  static uint8_t valueBuf[16];
 	  LCDMenu_StatusFlags flags = LCDMENU_STATUS_FLAGS_NONE;
 
@@ -117,6 +117,7 @@ static LCDMenu_StatusFlags PChangeHandler(const struct LCDMenu_MenuItem_ *item, 
 	    value++;
 	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
 	  }
+	  /*ToDo*/ //neuer Value an PID übergeben
 	  return flags;
 }
 
