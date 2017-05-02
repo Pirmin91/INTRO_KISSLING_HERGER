@@ -129,7 +129,13 @@ typedef struct {
 
 static void SHELL_SendChar(uint8_t ch) {
 #if SHELL_CONFIG_HAS_SHELL_RTT
-  RTT1_SendChar(ch);
+#if 0
+	while(RTT1_SendChar(ch)!=ERR_OK) {
+		/* retry */
+	}
+#else
+	CLS1_SendCharFct(ch, RTT1_SendChar);
+#endif
 #endif
 #if SHELL_CONFIG_HAS_EXTRA_UART
   UART_SendChar(ch);
