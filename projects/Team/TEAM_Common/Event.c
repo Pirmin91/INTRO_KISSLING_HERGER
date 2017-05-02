@@ -48,13 +48,15 @@ void EVNT_ClearEvent(EVNT_Handle event) {
 
 bool EVNT_EventIsSet(EVNT_Handle event) {
   /*! \todo Make it reentrant */
-	  bool res;
+	  //bool res;
+	  EVNT_MemUnit res;
 	  CS1_CriticalVariable()
 
 	  CS1_EnterCritical();
+	  //res = (GET_EVENT(event)!=0); // Variante 1, ist in CriticalSection
 	  res = GET_EVENT(event);
 	  CS1_ExitCritical();
-	  return res;
+	  return res !=0;	// Variante 2 (better)
 }
 
 bool EVNT_EventIsSetAutoClear(EVNT_Handle event) {
