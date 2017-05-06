@@ -35,8 +35,8 @@ static bool requestLCDUpdate = FALSE;
 typedef enum {
   LCD_MENU_ID_NONE = LCDMENU_ID_NONE, /* special value! */
   LCD_MENU_ID_MAIN,
-    LCD_MENU_ID_BACKLIGHT,
-    LCD_MENU_ID_NUM_VALUE,
+  LCD_MENU_ID_BACKLIGHT,
+  LCD_MENU_ID_NUM_VALUE,
   //eigene Menu IDs
   LCD_MENU_ID_ROBOT,
   LCD_MENU_ID_PID,
@@ -44,6 +44,10 @@ typedef enum {
   LCD_MENU_ID_I_VALUE,
   LCD_MENU_ID_D_VALUE,
   LCD_MENU_ID_W_VALUE,
+  //für snake game
+  LCD_MENU_ID_GAMES,
+  LCD_MENU_ID_SNAKE
+
 } LCD_MenuIDs;
 
 static LCDMenu_StatusFlags ValueChangeHandler(const struct LCDMenu_MenuItem_ *item, LCDMenu_EventType event, void **dataP) {
@@ -215,6 +219,40 @@ static LCDMenu_StatusFlags WChangeHandler(const struct LCDMenu_MenuItem_ *item, 
 	  return flags;
 }
 
+//Handler für Start des snake games
+static LCDMenu_StatusFlags SnakeGameHandler(const struct LCDMenu_MenuItem_ *item, LCDMenu_EventType event, void **dataP) {
+	  //Initialisierung des snake games und erstellung des Tasks
+	  //static int value = 0;   //aktueller P-Wert abfragen /*ToDo*/
+	  //static uint8_t valueBuf[16];
+	  LCDMenu_StatusFlags flags = LCDMENU_STATUS_FLAGS_NONE;
+
+	  if (!getStateSnakeGame()) {
+		  startSnakeGame(TRUE); 	//snake game soll gestartet werden, falls noch nicht gemacht
+	  }
+	  /*(void)item;
+	  if (event==LCDMENU_EVENT_GET_TEXT) {
+	    UTIL1_strcpy(valueBuf, sizeof(valueBuf), (uint8_t*)"P: ");
+	    UTIL1_strcatNum32s(valueBuf, sizeof(valueBuf), value);
+	    *dataP = valueBuf;
+	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	  } else if (event==LCDMENU_EVENT_GET_EDIT_TEXT) {
+	    UTIL1_strcpy(valueBuf, sizeof(valueBuf), (uint8_t*)"[-] ");
+	    UTIL1_strcatNum32s(valueBuf, sizeof(valueBuf), value);
+	    UTIL1_strcat(valueBuf, sizeof(valueBuf), (uint8_t*)" [+]");
+	    *dataP = valueBuf;
+	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	  } else if (event==LCDMENU_EVENT_DECREMENT) {
+			if (value > 0) {
+			  value--;
+			}
+	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	  } else if (event==LCDMENU_EVENT_INCREMENT) {
+	    value++;
+	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	  }*/
+	  return flags;
+}
+
 static const LCDMenu_MenuItem menus[] =
 {/* id,                                     grp, pos,   up,                       down,                             text,           callback                      flags                  */
     {LCD_MENU_ID_MAIN,                        0,   0,   LCD_MENU_ID_NONE,         LCD_MENU_ID_BACKLIGHT,            "General",      NULL,                         LCDMENU_MENU_FLAGS_NONE},
@@ -227,7 +265,9 @@ static const LCDMenu_MenuItem menus[] =
 	  {LCD_MENU_ID_I_VALUE,                   3,  1,   LCD_MENU_ID_PID,           LCD_MENU_ID_NONE,            	    NULL,           IChangeHandler,     	      LCDMENU_MENU_FLAGS_EDITABLE},
 	  {LCD_MENU_ID_D_VALUE,                   3,  2,   LCD_MENU_ID_PID,           LCD_MENU_ID_NONE,            	    NULL,           DChangeHandler,      		  LCDMENU_MENU_FLAGS_EDITABLE},
 	  {LCD_MENU_ID_W_VALUE,                   3,  3,   LCD_MENU_ID_PID,           LCD_MENU_ID_NONE,            	    NULL,           WChangeHandler,     		  LCDMENU_MENU_FLAGS_EDITABLE},
-
+	  //für snake game
+	  {LCD_MENU_ID_GAMES,                     0,  2,   LCD_MENU_ID_NONE,          LCD_MENU_ID_SNAKE,            	"Games",        NULL,     		  			  LCDMENU_MENU_FLAGS_NONE},
+	  {LCD_MENU_ID_SNAKE,                     4,  0,   LCD_MENU_ID_GAMES,         LCD_MENU_ID_NONE,            	    "Snake",        SnakeGameHandler,     		  LCDMENU_MENU_FLAGS_NONE},
 };
 
 // Lab 29: there is no Radio-Module at the moment (reason of comment the function)
@@ -328,33 +368,36 @@ static void LCD_Task(void *param) {
       LCDMenu_OnEvent(LCDMENU_EVENT_DRAW, NULL);
     }
 #if 1 /*! \todo Change this to for your own needs, or use direct task notification */
-    if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_LEFT)) { /* left */
-      LCDMenu_OnEvent(LCDMENU_EVENT_LEFT, NULL);
-      //ShowTextOnLCD("left");
-    }
-    if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_RIGHT)) { /* right */
-      LCDMenu_OnEvent(LCDMENU_EVENT_RIGHT, NULL);
-      //ShowTextOnLCD("right");
-    }
-    if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_UP)) { /* up */
-      LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
-      //ShowTextOnLCD("up");
-    }
-    if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_DOWN)) { /* down */
-      LCDMenu_OnEvent(LCDMENU_EVENT_DOWN, NULL);
-      //ShowTextOnLCD("down");
-    }
-    if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_CENTER)) { /* center */
-      LCDMenu_OnEvent(LCDMENU_EVENT_ENTER, NULL);
-      //ShowTextOnLCD("center");
-    }
-    if (EVNT_EventIsSetAutoClear(EVNT_LCD_SIDE_BTN_UP)) { /* side up */
-      LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
-      //ShowTextOnLCD("side up");
-    }
-    if (EVNT_EventIsSetAutoClear(EVNT_LCD_SIDE_BTN_DOWN)) { /* side down */
-      LCDMenu_OnEvent(LCDMENU_EVENT_DOWN, NULL);
-      //ShowTextOnLCD("side down");
+    //LCD Menu Events nur handeln falls Snake Game noch nicht gestartet wurde
+    if (!getStateSnakeGame()) {
+		if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_LEFT)) { /* left */
+		  LCDMenu_OnEvent(LCDMENU_EVENT_LEFT, NULL);
+		  //ShowTextOnLCD("left");
+		}
+		if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_RIGHT)) { /* right */
+		  LCDMenu_OnEvent(LCDMENU_EVENT_RIGHT, NULL);
+		  //ShowTextOnLCD("right");
+		}
+		if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_UP)) { /* up */
+		  LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
+		  //ShowTextOnLCD("up");
+		}
+		if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_DOWN)) { /* down */
+		  LCDMenu_OnEvent(LCDMENU_EVENT_DOWN, NULL);
+		  //ShowTextOnLCD("down");
+		}
+		if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_CENTER)) { /* center */
+		  LCDMenu_OnEvent(LCDMENU_EVENT_ENTER, NULL);
+		  //ShowTextOnLCD("center");
+		}
+		if (EVNT_EventIsSetAutoClear(EVNT_LCD_SIDE_BTN_UP)) { /* side up */
+		  LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
+		  //ShowTextOnLCD("side up");
+		}
+		if (EVNT_EventIsSetAutoClear(EVNT_LCD_SIDE_BTN_DOWN)) { /* side down */
+		  LCDMenu_OnEvent(LCDMENU_EVENT_DOWN, NULL);
+		  //ShowTextOnLCD("side down");
+		}
     }
 #endif
 #endif /* PL_CONFIG_HAS_LCD_MENU */

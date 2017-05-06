@@ -65,6 +65,16 @@ typedef enum EVNT_Handle {
   EVNT_LCD_SIDE_BTN_UP,
   EVNT_LCD_SIDE_BTN_DOWN,
 #endif
+#if PL_CONFIG_HAS_SNAKE_GAME
+  /* button press events */
+  EVNT_SNAKE_BTN_LEFT,
+  EVNT_SNAKE_BTN_RIGHT,
+  EVNT_SNAKE_BTN_UP,
+  EVNT_SNAKE_BTN_DOWN,
+  EVNT_SNAKE_BTN_CENTER,
+  EVNT_SNAKE_SIDE_BTN_UP,
+  EVNT_SNAKE_SIDE_BTN_DOWN,
+#endif
   /*!< \todo Your extra events here */
   EVNT_NOF_EVENTS       /*!< Must be last one! */
 } EVNT_Handle;

@@ -72,8 +72,9 @@ static void MainTask(void *pvParameters) {
 		//LEDPin2_NegVal();
 #endif
 		//vTaskDelay(200/portTICK_PERIOD_MS);		//200ms Blinkperiode
-		//Lab 28 Key Polling für LCD Anzeige
-		KEY_Scan();
+		//Lab 28 Key Polling mit Debounce für LCD Anzeige
+		//KEY_Scan();
+		KEYDBNC_Process(); // Falls ein Button gedrückt wird, wird mit dieser Funktion entprellt
 		vTaskDelay(200/portTICK_PERIOD_MS);		//200ms Blinkperiode
 
 		EVNT_HandleEvent(APP_EventHandler, TRUE);	//Eventhandler aufrufen

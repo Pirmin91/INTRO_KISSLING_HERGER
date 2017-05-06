@@ -71,36 +71,72 @@ static void KEYDBNC_OnDebounceEvent(DBNC_EventKinds event, DBNC_KeySet keys) {
 #if PL_CONFIG_NOF_KEYS >= 1
       if (keys&(1<<0)) {
         EVNT_SetEvent(EVNT_SW1_PRESSED);
+	#if PL_CONFIG_HAS_LCD
+		EVNT_SetEvent(EVNT_LCD_BTN_RIGHT);
+	#endif
+	#if PL_CONFIG_HAS_SNAKE_GAME
+		EVNT_SetEvent(EVNT_SNAKE_BTN_RIGHT);
+	#endif
       }
 #endif
 #if PL_CONFIG_NOF_KEYS >= 2
       if (keys&(1<<1)) {
         EVNT_SetEvent(EVNT_SW2_PRESSED);
+	#if PL_CONFIG_HAS_LCD
+		EVNT_SetEvent(EVNT_LCD_BTN_LEFT);
+	#endif
+	#if PL_CONFIG_HAS_SNAKE_GAME
+		EVNT_SetEvent(EVNT_SNAKE_BTN_LEFT);
+	#endif
       }
 #endif
 #if PL_CONFIG_NOF_KEYS >= 3
       if (keys&(1<<2)) {
         EVNT_SetEvent(EVNT_SW3_PRESSED);
+	#if PL_CONFIG_HAS_LCD
+		EVNT_SetEvent(EVNT_LCD_BTN_DOWN);
+	#endif
+	#if PL_CONFIG_HAS_SNAKE_GAME
+		EVNT_SetEvent(EVNT_SNAKE_BTN_DOWN);
+	#endif
       }
 #endif
 #if PL_CONFIG_NOF_KEYS >= 4
       if (keys&(1<<3)) {
         EVNT_SetEvent(EVNT_SW4_PRESSED);
+	#if PL_CONFIG_HAS_LCD
+		EVNT_SetEvent(EVNT_LCD_BTN_CENTER);
+	#endif
+	#if PL_CONFIG_HAS_SNAKE_GAME
+		EVNT_SetEvent(EVNT_SNAKE_BTN_CENTER);
+	#endif
       }
 #endif
 #if PL_CONFIG_NOF_KEYS >= 5
       if (keys&(1<<4)) {
         EVNT_SetEvent(EVNT_SW5_PRESSED);
+	#if PL_CONFIG_HAS_LCD
+		EVNT_SetEvent(EVNT_LCD_BTN_UP);
+	#endif
+	#if PL_CONFIG_HAS_SNAKE_GAME
+		EVNT_SetEvent(EVNT_SNAKE_BTN_UP);
+	#endif
       }
 #endif
 #if PL_CONFIG_NOF_KEYS >= 6
       if (keys&(1<<5)) {
         EVNT_SetEvent(EVNT_SW6_PRESSED);
+	#if PL_CONFIG_HAS_LCD
+		EVNT_SetEvent(EVNT_LCD_SIDE_BTN_DOWN);
+	#endif
       }
 #endif
 #if PL_CONFIG_NOF_KEYS >= 7
       if (keys&(1<<6)) {
         EVNT_SetEvent(EVNT_SW7_PRESSED);
+	#if PL_CONFIG_HAS_LCD
+		EVNT_SetEvent(EVNT_LCD_SIDE_BTN_UP);
+	#endif
       }
 #endif
       break;

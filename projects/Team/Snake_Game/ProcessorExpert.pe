@@ -3,7 +3,7 @@
   <Header>
     <Name>SnakeGame_Herger_Kissling</Name>
     <SavedBy>p.herger</SavedBy>
-    <ModificationStamp>100</ModificationStamp>
+    <ModificationStamp>101</ModificationStamp>
     <Date>2017-05-02</Date>
     <IDE>Eclipse IDE</IDE>
     <PEversion>1.12.2.RT7_b1550-0615</PEversion>
@@ -29,7 +29,7 @@
     <UseExistingModules>true</UseExistingModules>
     <RenamePeripheries>false</RenamePeripheries>
     <Autodependency>true</Autodependency>
-    <ProjectCompNumb>422</ProjectCompNumb>
+    <ProjectCompNumb>430</ProjectCompNumb>
     <DelUnusedPreviouslyGenFiles>true</DelUnusedPreviouslyGenFiles>
     <GeneratedCodeFrozen>false</GeneratedCodeFrozen>
     <AssignInitComponentNameToPrph>true</AssignInitComponentNameToPrph>

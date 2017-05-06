@@ -52,6 +52,8 @@
 #define PL_LOCAL_CONFIG_HAS_JOYSTICK_DISABLED             /* disable joystick */
 //#define PL_LOCAL_CONFIG_HAS_LCD_DISABLED                  /* disable LCD */
 //#define PL_LOCAL_CONFIG_HAS_LCD_MENU_DISABLED             /* disable LCD menu */
+//added for snake game
+//#define PL_LOCAL_CONFIG_HAS_SNAKE_GAME_DISABLED           /* disable snake game */
 
 /* robot hardware functionality */
 #define PL_LOCAL_CONFIG_HAS_MOTOR_DISABLED                /* disable motor */

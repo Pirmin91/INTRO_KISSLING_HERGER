@@ -27,6 +27,8 @@
 #include "FRTOS1.h"
 #include "Event.h"
 
+#include "LED.h"
+
 /* constants */
 #define UP    1
 #define RIGHT 2
@@ -38,8 +40,10 @@
 #define MAX_HEIGHT GDisp1_GetHeight()
 
 /* defaults */
-#define SNAKE_LEN   10 /* initial snake len */
-#define SNAKE_SPEED 20 /* initial delay in ms */
+//#define SNAKE_LEN   10 /* initial snake len */
+#define SNAKE_LEN   20 /* initial snake len */
+//#define SNAKE_SPEED 20 /* initial delay in ms */
+#define SNAKE_SPEED 50 /* initial delay in ms */
 
 /* snake length */
 static int snakeLen = SNAKE_LEN;
@@ -52,6 +56,9 @@ static GDisp1_PixelDim xFood = 0, yFood  = 0; /* location of food */
 /* directions */
 static int dr = 0, dc = 1;
 static bool left = FALSE, right = TRUE, up = FALSE, down = FALSE;
+
+/* eigene Variablen*/
+static bool start = FALSE;
 
 #define SNAKE_MAX_LEN   48 /* maximum length of snake */
 
@@ -66,6 +73,17 @@ static GDisp1_PixelDim snakeRow[SNAKE_MAX_LEN];
 
 static void waitAnyButton(void) {
   /*! \todo Wait for any button pressed */
+	while(!EVNT_EventIsSetAutoClear(EVNT_SNAKE_BTN_LEFT)&&
+			!EVNT_EventIsSetAutoClear(EVNT_SNAKE_BTN_RIGHT)&&
+			!EVNT_EventIsSetAutoClear(EVNT_SNAKE_BTN_UP)&&
+			!EVNT_EventIsSetAutoClear(EVNT_SNAKE_BTN_DOWN)&&
+			!EVNT_EventIsSetAutoClear(EVNT_SNAKE_BTN_CENTER)&&
+			!EVNT_EventIsSetAutoClear(EVNT_SNAKE_SIDE_BTN_UP)&&
+			!EVNT_EventIsSetAutoClear(EVNT_SNAKE_SIDE_BTN_DOWN))
+	{
+		LED1_Neg();
+		vTaskDelay(time/portTICK_RATE_MS); 	//ein Task Delay, damit dieser Task nicht alle CPU Zeit beansprucht
+	}
 }
 
 static void delay(int ms) {
@@ -229,35 +247,35 @@ static void direc(int d) {
 static void moveSnake(void) {
   /* LEFT */
   /*! \todo handle events */
-  if("left event" && !right) {
+  if(EVNT_EventIsSetAutoClear(EVNT_SNAKE_BTN_LEFT) && !right) {
     if((xSnake > 0 || xSnake <= GDisp1_GetWidth() - xSnake)) {
       direc(LEFT);
     }
     return;
   }
   /* RIGHT */
-  if("right event" && !left) {
+  if(EVNT_EventIsSetAutoClear(EVNT_SNAKE_BTN_RIGHT)  && !left) {
     if((xSnake > 0 || xSnake <= GDisp1_GetWidth() - xSnake)) {
       direc(RIGHT);
     }
     return;
   }
   /* UP */
-  if("up event" && !down) {
+  if(EVNT_EventIsSetAutoClear(EVNT_SNAKE_BTN_UP)  && !down) {
     if((ySnake > 0 || ySnake <= GDisp1_GetHeight() - ySnake)) {
       direc(UP);
     }
     return;
   }
   /* DOWN */
-  if("down event" && !up) {
+  if(EVNT_EventIsSetAutoClear(EVNT_SNAKE_BTN_DOWN)  && !up) {
     if((ySnake > 0 || ySnake <= GDisp1_GetHeight() - ySnake)) {
       direc(DOWN);
     }
     return;
   }
   /* START/PAUSE */
-  if("start/pause event") {
+  if(EVNT_EventIsSetAutoClear(EVNT_SNAKE_BTN_CENTER)) {
     showPause();
   }
 }
@@ -294,7 +312,10 @@ static void gameover(void) {
   delay(4000);
   waitAnyButton();
  
-  resetGame();  
+  resetGame();
+
+  //start Variable wieder zurücksetzen für neuen Start
+  startSnakeGame(FALSE);
 }
 
 static void snake(void) {
@@ -383,7 +404,24 @@ static void intro(void) {
   WAIT1_WaitOSms(3000);
 }
 
+void startSnakeGame(bool doStart) {
+	if (doStart) {
+		start = TRUE;		//Snake Game soll nun gestartet werden
+	}
+	else {
+		start = FALSE;
+	}
+}
+
+bool getStateSnakeGame(void) {
+	return start;
+}
+
 static void SnakeTask(void *pvParameters) {
+  //Snake Game noch nicht gestartet wurde über das Menu, soll der Task in der While Schalufe sein
+  while (!start) {
+	  vTaskDelay(time/portTICK_RATE_MS); 	//ein Task Delay, damit dieser Task nicht alle CPU Zeit beansprucht
+  }
   intro();
   resetGame();
   for(;;) {
@@ -398,5 +436,8 @@ void SNAKE_Deinit(void) {
 
 void SNAKE_Init(void) {
   /*! \todo implement init */
+	if (xTaskCreate(SnakeTask, "SnakeGame", configMINIMAL_STACK_SIZE+100, NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
+		for(;;){} /* error! probably out of memory */
+	}
 }
 #endif /* PL_HAS_SNAKE_GAME */

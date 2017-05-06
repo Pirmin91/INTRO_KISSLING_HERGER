@@ -12,6 +12,16 @@
 /*! \todo Extend interface as needed */
 
 /*!
+ * \startet das Snake Game
+ */
+void startSnakeGame(bool);
+
+/*!
+ * \getter Methode um abzufragen ob Spiel gestartet wurde
+ */
+bool getStateSnakeGame(void);
+
+/*!
  * \brief Driver de-initialization.
  */
 void SNAKE_Deinit(void);

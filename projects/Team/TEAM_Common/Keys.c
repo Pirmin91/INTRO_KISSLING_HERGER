@@ -82,7 +82,6 @@ void KEY_Scan(void) {
 #if PL_CONFIG_HAS_LCD
     EVNT_SetEvent(EVNT_LCD_SIDE_BTN_UP);
 #endif
-
   }
 #endif
 }

@@ -95,6 +95,9 @@
 
 #define PL_CONFIG_HAS_BATTERY_ADC       (1 && !defined(PL_LOCAL_CONFIG_HAS_BATTERY_ADC_DISABLED) && PL_CONFIG_BOARD_IS_ROBO)
 
+//added for snake game
+#define PL_CONFIG_HAS_SNAKE_GAME        (1 && !defined(PL_LOCAL_CONFIG_HAS_SNAKE_GAME_DISABLED) && PL_CONFIG_HAS_LCD)
+
 /*!
  * \brief Driver de-initialization
  */
