@@ -108,6 +108,8 @@ static const KIN1_UID RoboIDs[] = {
   /* 3: L23, V2 */ {{0x00,0x0A,0x00,0x00,0x67,0xCD,0xB8,0x21,0x4E,0x45,0x32,0x15,0x30,0x02,0x00,0x13}}, /* revert left & right motor */
   /* 4: L11, V2 */ {{0x00,0x19,0x00,0x00,0x67,0xCD,0xB9,0x11,0x4E,0x45,0x32,0x15,0x30,0x02,0x00,0x13}}, /* revert right encoder, possible damaged motor driver? */
   /* 5: L4, V1 */  {{0x00,0x0B,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x4E,0x45,0x27,0x99,0x10,0x02,0x00,0x24}},
+  /* 6: L6, V1 */  {{0x00,0x17,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x4E,0x45,0x27,0x99,0x10,0x02,0x00,0x06}},
+  /* 1: L1, V1 */  {{0x00,0x19,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x4E,0x45,0x27,0x99,0x10,0x02,0x00,0x25}},
 };
 
 static void APP_AdoptToHardware(void) {
@@ -137,6 +139,19 @@ static void APP_AdoptToHardware(void) {
     MOT_Invert(MOT_GetMotorHandle(MOT_MOTOR_LEFT), TRUE); /* revert left motor */
     (void)Q4CLeft_SwapPins(TRUE);
     (void)Q4CRight_SwapPins(TRUE);
+
+    // Robot L1 und L6 of Team Herger & Kissling
+  } else if (KIN1_UIDSame(&id, &RoboIDs[6])) { /* L6 */
+      MOT_Invert(MOT_GetMotorHandle(MOT_MOTOR_LEFT), TRUE); /* revert left motor */
+      MOT_Invert(MOT_GetMotorHandle(MOT_MOTOR_RIGHT), FALSE); /* revert right motor */
+      (void)Q4CLeft_SwapPins(TRUE);
+      (void)Q4CRight_SwapPins(TRUE);
+
+  } else if (KIN1_UIDSame(&id, &RoboIDs[7])) { /* L1 */
+	    MOT_Invert(MOT_GetMotorHandle(MOT_MOTOR_LEFT), TRUE); /* revert left motor */
+	    MOT_Invert(MOT_GetMotorHandle(MOT_MOTOR_RIGHT), FALSE); /* revert right motor */
+	    (void)Q4CLeft_SwapPins(TRUE);
+	    (void)Q4CRight_SwapPins(TRUE);
   }
 #endif
 #if PL_CONFIG_HAS_QUADRATURE && PL_CONFIG_BOARD_IS_ROBO_V2
