@@ -38,6 +38,8 @@ extern "C" {
 #include "Platform.h"
 #include "Timer.h"
 #include "Keys.h"
+#include "Tacho.h"
+
 /*
 ** ===================================================================
 **     Event       :  Cpu_OnNMIINT (module Events)
@@ -121,8 +123,11 @@ void FRTOS1_vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
 void FRTOS1_vApplicationTickHook(void)
 {
   /* Called for every RTOS tick. */
-#if PL_CONFIG_HAS_TIMER
-  TMR_OnInterrupt();
+//#if PL_CONFIG_HAS_TIMER
+//  TMR_OnInterrupt();
+//#endif
+#if PL_CONFIG_HAS_MOTOR_TACHO
+  TACHO_Sample();
 #endif
 }
 
