@@ -415,7 +415,7 @@ void PID_Deinit(void) {
 
 void PID_Init(void) {
   /*! \todo determine your PID values */
-  speedLeftConfig.pFactor100 = 0;
+  /*speedLeftConfig.pFactor100 = 0;
   speedLeftConfig.iFactor100 = 0;
   speedLeftConfig.dFactor100 = 0;
   speedLeftConfig.iAntiWindup = 0;
@@ -426,6 +426,21 @@ void PID_Init(void) {
   speedRightConfig.iFactor100 = 0;
   speedRightConfig.dFactor100 = 0;
   speedRightConfig.iAntiWindup = 0;
+  speedRightConfig.lastError = 0;
+  speedRightConfig.integral = 0;*/
+
+  //eigene Werte
+  speedLeftConfig.pFactor100 = 2100;
+  speedLeftConfig.iFactor100 = 60;
+  speedLeftConfig.dFactor100 = 0;
+  speedLeftConfig.iAntiWindup = 35000;
+  speedLeftConfig.lastError = 0;
+  speedLeftConfig.integral = 0;
+
+  speedRightConfig.pFactor100 = 2100;
+  speedRightConfig.iFactor100 = 60;
+  speedRightConfig.dFactor100 = 0;
+  speedRightConfig.iAntiWindup = 35000;
   speedRightConfig.lastError = 0;
   speedRightConfig.integral = 0;
 

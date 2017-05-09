@@ -24,6 +24,7 @@
 #endif
 #include "LCDMenu.h"
 /*! \todo Add additional includes as needed */
+#include "Snake.h"
 
 
 /* status variables */
@@ -222,34 +223,12 @@ static LCDMenu_StatusFlags WChangeHandler(const struct LCDMenu_MenuItem_ *item, 
 //Handler für Start des snake games
 static LCDMenu_StatusFlags SnakeGameHandler(const struct LCDMenu_MenuItem_ *item, LCDMenu_EventType event, void **dataP) {
 	  //Initialisierung des snake games und erstellung des Tasks
-	  //static int value = 0;   //aktueller P-Wert abfragen /*ToDo*/
-	  //static uint8_t valueBuf[16];
 	  LCDMenu_StatusFlags flags = LCDMENU_STATUS_FLAGS_NONE;
 
 	  if (!getStateSnakeGame()) {
 		  startSnakeGame(TRUE); 	//snake game soll gestartet werden, falls noch nicht gemacht
 	  }
-	  /*(void)item;
-	  if (event==LCDMENU_EVENT_GET_TEXT) {
-	    UTIL1_strcpy(valueBuf, sizeof(valueBuf), (uint8_t*)"P: ");
-	    UTIL1_strcatNum32s(valueBuf, sizeof(valueBuf), value);
-	    *dataP = valueBuf;
-	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
-	  } else if (event==LCDMENU_EVENT_GET_EDIT_TEXT) {
-	    UTIL1_strcpy(valueBuf, sizeof(valueBuf), (uint8_t*)"[-] ");
-	    UTIL1_strcatNum32s(valueBuf, sizeof(valueBuf), value);
-	    UTIL1_strcat(valueBuf, sizeof(valueBuf), (uint8_t*)" [+]");
-	    *dataP = valueBuf;
-	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
-	  } else if (event==LCDMENU_EVENT_DECREMENT) {
-			if (value > 0) {
-			  value--;
-			}
-	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
-	  } else if (event==LCDMENU_EVENT_INCREMENT) {
-	    value++;
-	    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
-	  }*/
+
 	  return flags;
 }
 

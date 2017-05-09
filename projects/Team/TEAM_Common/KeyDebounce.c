@@ -239,8 +239,10 @@ static DBNC_FSMData KEYDBNC_FSMdata = {
   0, /* key scan value */
   0, /* long key count */
   TRG_KEYPRESS, /* trigger to be used */
-  (50/TRG_TICKS_MS), /*debounceTicks */
-  (500/TRG_TICKS_MS), /* longKeyTicks for x ms */
+  //(50/TRG_TICKS_MS), /*debounceTicks */
+  (40/TRG_TICKS_MS), /*debounceTicks --> für Snake Game um Reaktionszeit der Schlange zu verkürzen */
+  //(500/TRG_TICKS_MS), /* longKeyTicks for x ms */
+  (5000/TRG_TICKS_MS), /* longKeyTicks for x ms */
 };
 
 void KEYDBNC_Process(void) {
