@@ -459,6 +459,11 @@ void PID_Init(void) {
   posLeftConfig.dFactor100 = 0;
   posLeftConfig.iAntiWindup = 0;
   posLeftConfig.maxSpeedPercent = 0;
+  posRightConfig.pFactor100 = 0;
+  posRightConfig.iFactor100 = 0;
+  posRightConfig.dFactor100 = 0;
+  posRightConfig.iAntiWindup = 0;
+  posRightConfig.maxSpeedPercent = 0;
 #else
   //Werte von Styger für Position PID
   posLeftConfig.pFactor100 = 1000;
@@ -466,16 +471,17 @@ void PID_Init(void) {
   posLeftConfig.dFactor100 = 50;
   posLeftConfig.iAntiWindup = 200;
   posLeftConfig.maxSpeedPercent = 40;
+  posRightConfig.pFactor100 = 1000;
+  posRightConfig.iFactor100 = 2;
+  posRightConfig.dFactor100 = 50;
+  posRightConfig.iAntiWindup = 200;
+  posRightConfig.maxSpeedPercent = 40;
 #endif
   posLeftConfig.lastError = 0;
   posLeftConfig.integral = 0;
-  posRightConfig.pFactor100 = posLeftConfig.pFactor100;
-  posRightConfig.iFactor100 = posLeftConfig.iFactor100;
-  posRightConfig.dFactor100 = posLeftConfig.dFactor100;
-  posRightConfig.iAntiWindup = posLeftConfig.iAntiWindup;
   posRightConfig.lastError = posLeftConfig.lastError;
   posRightConfig.integral = posLeftConfig.integral;
-  posRightConfig.maxSpeedPercent = posLeftConfig.maxSpeedPercent;
+
 }
 
 #endif /* PL_CONFIG_HAS_PID */

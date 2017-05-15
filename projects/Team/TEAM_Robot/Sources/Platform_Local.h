@@ -66,7 +66,7 @@
 //#define PL_LOCAL_CONFIG_HAS_DRIVE_DISABLED                /* disable drive module */
 #define PL_LOCAL_CONFIG_HAS_LINE_FOLLOW_DISABLED          /* disable line following */
 
-#define PL_LOCAL_CONFIG_HAS_TURN_DISABLED                 /* disable turning module */
+//#define PL_LOCAL_CONFIG_HAS_TURN_DISABLED                 /* disable turning module */
 #define PL_LOCAL_CONFIG_HAS_LINE_MAZE_DISABLED            /* disable maze solving */
 #define PL_LOCAL_CONFIG_HAS_BATTERY_ADC_DISABLED          /* disable battery ADC */
 
