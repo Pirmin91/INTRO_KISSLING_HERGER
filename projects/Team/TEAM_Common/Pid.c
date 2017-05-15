@@ -415,7 +415,8 @@ void PID_Deinit(void) {
 
 void PID_Init(void) {
   /*! \todo determine your PID values */
-  /*speedLeftConfig.pFactor100 = 0;
+#if 0
+  speedLeftConfig.pFactor100 = 0;
   speedLeftConfig.iFactor100 = 0;
   speedLeftConfig.dFactor100 = 0;
   speedLeftConfig.iAntiWindup = 0;
@@ -427,8 +428,8 @@ void PID_Init(void) {
   speedRightConfig.dFactor100 = 0;
   speedRightConfig.iAntiWindup = 0;
   speedRightConfig.lastError = 0;
-  speedRightConfig.integral = 0;*/
-
+  speedRightConfig.integral = 0;
+#else
   //eigene Werte
   speedLeftConfig.pFactor100 = 2100;
   speedLeftConfig.iFactor100 = 60;
@@ -443,7 +444,7 @@ void PID_Init(void) {
   speedRightConfig.iAntiWindup = 35000;
   speedRightConfig.lastError = 0;
   speedRightConfig.integral = 0;
-
+#endif
   lineFwConfig.pFactor100 = 0;
   lineFwConfig.iFactor100 = 0;
   lineFwConfig.dFactor100 = 0;
@@ -452,11 +453,20 @@ void PID_Init(void) {
   lineFwConfig.lastError = 0;
   lineFwConfig.integral = 0;
 
+#if 0
   posLeftConfig.pFactor100 = 0;
   posLeftConfig.iFactor100 = 0;
   posLeftConfig.dFactor100 = 0;
   posLeftConfig.iAntiWindup = 0;
   posLeftConfig.maxSpeedPercent = 0;
+#else
+  //Werte von Styger für Position PID
+  posLeftConfig.pFactor100 = 1000;
+  posLeftConfig.iFactor100 = 2;
+  posLeftConfig.dFactor100 = 50;
+  posLeftConfig.iAntiWindup = 200;
+  posLeftConfig.maxSpeedPercent = 40;
+#endif
   posLeftConfig.lastError = 0;
   posLeftConfig.integral = 0;
   posRightConfig.pFactor100 = posLeftConfig.pFactor100;
