@@ -222,7 +222,7 @@ static void eatFood(void) {
   snakeLen += 2;
   if(snakeLen > SNAKE_MAX_LEN-1)
   {
-	  sankeLen = SNAKE_MAX_LEN-1;
+	  snakeLen = SNAKE_MAX_LEN-1;
   }
   /* new coordinates food randomly */
   xFood = random(1, MAX_WIDTH-3);

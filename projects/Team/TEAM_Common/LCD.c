@@ -222,14 +222,15 @@ static LCDMenu_StatusFlags WChangeHandler(const struct LCDMenu_MenuItem_ *item, 
 
 //Handler für Start des snake games
 static LCDMenu_StatusFlags SnakeGameHandler(const struct LCDMenu_MenuItem_ *item, LCDMenu_EventType event, void **dataP) {
-	  //Initialisierung des snake games und erstellung des Tasks
-	  LCDMenu_StatusFlags flags = LCDMENU_STATUS_FLAGS_NONE;
+	//Initialisierung des snake games und erstellung des Tasks
+	LCDMenu_StatusFlags flags = LCDMENU_STATUS_FLAGS_NONE;
 
-	  if (!getStateSnakeGame()) {
+	if (event==LCDMENU_EVENT_ENTER) {
+		if (!getStateSnakeGame()) {
 		  startSnakeGame(TRUE); 	//snake game soll gestartet werden, falls noch nicht gemacht
-	  }
-
-	  return flags;
+		}
+	}
+	return flags;
 }
 
 static const LCDMenu_MenuItem menus[] =
