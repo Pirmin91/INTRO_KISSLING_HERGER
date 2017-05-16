@@ -465,17 +465,32 @@ void PID_Init(void) {
   posRightConfig.iAntiWindup = 0;
   posRightConfig.maxSpeedPercent = 0;
 #else
-  //Werte von Styger für Position PID
+  // Werte von Herr Styger für Position PID
+  /*
   posLeftConfig.pFactor100 = 1000;
   posLeftConfig.iFactor100 = 2;
   posLeftConfig.dFactor100 = 50;
   posLeftConfig.iAntiWindup = 200;
-  posLeftConfig.maxSpeedPercent = 40;
+  posLeftConfig.maxSpeedPercent = 50;
   posRightConfig.pFactor100 = 1000;
   posRightConfig.iFactor100 = 2;
   posRightConfig.dFactor100 = 50;
   posRightConfig.iAntiWindup = 200;
+  posRightConfig.maxSpeedPercent = 50;
+  */
+
+  // Eigene Werte
+  posLeftConfig.pFactor100 = 400;
+  posLeftConfig.iFactor100 = 2;
+  posLeftConfig.dFactor100 = 50;
+  posLeftConfig.iAntiWindup = 150;
+  posLeftConfig.maxSpeedPercent = 40;
+  posRightConfig.pFactor100 = 400;
+  posRightConfig.iFactor100 = 2;
+  posRightConfig.dFactor100 = 50;
+  posRightConfig.iAntiWindup = 150;
   posRightConfig.maxSpeedPercent = 40;
+
 #endif
   posLeftConfig.lastError = 0;
   posLeftConfig.integral = 0;
