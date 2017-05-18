@@ -28,6 +28,7 @@
 #include "Event.h"
 
 #include "LED.h"
+#include "LCD.h"
 
 /* constants */
 #define UP    1
@@ -58,7 +59,12 @@ static int dr = 0, dc = 1;
 static bool left = FALSE, right = TRUE, up = FALSE, down = FALSE;
 
 /* eigene Variablen*/
-static bool start = FALSE;
+static bool started = FALSE;
+
+static SemaphoreHandle_t xSemaphoreSnakeGame;
+
+static TaskHandle_t xHandleSnakeTask = NULL;
+
 
 #define SNAKE_MAX_LEN   48 /* maximum length of snake */
 
@@ -313,13 +319,26 @@ static void gameover(void) {
   y += totalHeight;
   FDisp1_WriteString((unsigned char*)"(Press Button)", GDisp1_COLOR_BLACK, &x, &y, font);
   GDisp1_UpdateFull();
-  delay(4000);
+  //delay(4000);
   waitAnyButton();
  
-  resetGame();
-
   //start Variable wieder zurücksetzen für neuen Start
-  startSnakeGame(FALSE);
+  //startSnakeGame(FALSE);
+
+  started = FALSE;
+
+  (void)xSemaphoreGive(xSemaphoreSnakeGame); //Semaphore wird freigegeben
+
+  //LCD updaten um Menu anzuzeigen
+  updateLCD();
+
+  //resetGame();
+  //Snake Task Delete
+  if(xHandleSnakeTask != NULL)
+  {
+      vTaskDelete(xHandleSnakeTask);
+  }
+
 }
 
 static void snake(void) {
@@ -408,30 +427,41 @@ static void intro(void) {
   WAIT1_WaitOSms(3000);
 }
 
-void startSnakeGame(bool doStart) {
-	if (doStart) {
-		start = TRUE;		//Snake Game soll nun gestartet werden
-	}
-	else {
-		start = FALSE;
+void startSnakeGame(void) {
+	//if (doStart) {
+	//	start = TRUE;		//Snake Game soll nun gestartet werden
+	//}
+	//else {
+	//	start = FALSE;
+	//}
+	(void)xSemaphoreGive(xSemaphoreSnakeGame); //gibt die Kontrolle dem Snake Task
+	started = TRUE;
+	//vTaskResume(xHandleSnakeTask);
+	if (xTaskCreate(SnakeTask, "SnakeGame", configMINIMAL_STACK_SIZE+100, NULL, tskIDLE_PRIORITY, &xHandleSnakeTask) != pdPASS) {
+		for(;;){} /* error! probably out of memory */
 	}
 }
 
-bool getStateSnakeGame(void) {
-	return start;
+bool snakeGameStarted(void) {
+	return started;
+	//return uxSemaphoreGetCount(xSemaphoreSnakeGame); 	//1 is returned if the semaphore is available, and 0 is returned if the semaphore is not available.
 }
 
 static void SnakeTask(void *pvParameters) {
   //Snake Game noch nicht gestartet wurde über das Menu, soll der Task in der While Schalufe sein
-  while (!start) {
-	  vTaskDelay(time/portTICK_RATE_MS); 	//ein Task Delay, damit dieser Task nicht alle CPU Zeit beansprucht
+  //while (!start) {
+  //	  vTaskDelay(time/portTICK_RATE_MS); 	//ein Task Delay, damit dieser Task nicht alle CPU Zeit beansprucht
+  //}
+  //Snake Game noch nicht gestartet wurde über das Menu blockt der Task auf einen Semaphore
+  if (xSemaphoreTake(xSemaphoreSnakeGame, portMAX_DELAY)==pdPASS) { /* block on semaphore */
+	  intro();
+	  resetGame();
+	  for(;;) {
+	    snake();
+	    vTaskDelay(time/portTICK_RATE_MS);
+	  }
   }
-  intro();
-  resetGame();
-  for(;;) {
-    snake();
-    vTaskDelay(time/portTICK_RATE_MS);
-  }
+  //vTaskDelay(time/portTICK_RATE_MS);
 }
 
 void SNAKE_Deinit(void) {
@@ -440,8 +470,18 @@ void SNAKE_Deinit(void) {
 
 void SNAKE_Init(void) {
   /*! \todo implement init */
-	if (xTaskCreate(SnakeTask, "SnakeGame", configMINIMAL_STACK_SIZE+100, NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
-		for(;;){} /* error! probably out of memory */
+	//Semaphore für Snake Task kreieren und in Queue registrieren
+	xSemaphoreSnakeGame = xSemaphoreCreateBinary(); // Creating Binary Semaphore
+	if (xSemaphoreSnakeGame == NULL)
+	{
+		// Failed! not enough heap memory! FOLIE 90
+		for(;;)
+		{
+
+		}
+	}
+	else {
+		  vQueueAddToRegistry(xSemaphoreSnakeGame, "SnakeGame_Sem");
 	}
 }
 #endif /* PL_HAS_SNAKE_GAME */

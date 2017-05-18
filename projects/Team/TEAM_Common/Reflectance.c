@@ -261,7 +261,7 @@ uint16_t REF_GetLineValue(void) {
   return refCenterLineVal;
 }
 
-#if PL_CONFIG_HAS_LINE_FOLLOW
+#if 1 || PL_CONFIG_HAS_LINE_FOLLOW
 static REF_LineKind ReadLineKind(SensorTimeType val[REF_NOF_SENSORS]) {
   uint32_t sum, sumLeft, sumRight, outerLeft, outerRight;
   int i;

@@ -226,8 +226,8 @@ static LCDMenu_StatusFlags SnakeGameHandler(const struct LCDMenu_MenuItem_ *item
 	LCDMenu_StatusFlags flags = LCDMENU_STATUS_FLAGS_NONE;
 
 	if (event==LCDMENU_EVENT_ENTER) {
-		if (!getStateSnakeGame()) {
-		  startSnakeGame(TRUE); 	//snake game soll gestartet werden, falls noch nicht gemacht
+		if (snakeGameStarted() == 0) {
+			startSnakeGame(); 	//snake game soll gestartet werden, falls noch nicht gemacht
 		}
 	}
 	return flags;
@@ -307,6 +307,10 @@ static void DrawText(void) {
   //GDisp1_UpdateFull();
 }
 
+void updateLCD(void) {
+	requestLCDUpdate = TRUE;
+}
+
 static void LCD_Task(void *param) {
   (void)param; /* not used */
 #if 1
@@ -349,7 +353,7 @@ static void LCD_Task(void *param) {
     }
 #if 1 /*! \todo Change this to for your own needs, or use direct task notification */
     //LCD Menu Events nur handeln falls Snake Game noch nicht gestartet wurde
-    if (!getStateSnakeGame()) {
+    if (snakeGameStarted() == 0) {
 		if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_LEFT)) { /* left */
 		  LCDMenu_OnEvent(LCDMENU_EVENT_LEFT, NULL);
 		  //ShowTextOnLCD("left");

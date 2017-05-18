@@ -14,12 +14,14 @@
 /*!
  * \startet das Snake Game
  */
-void startSnakeGame(bool);
+void startSnakeGame(void);
 
 /*!
- * \getter Methode um abzufragen ob Spiel gestartet wurde
+ * \Methode um abzufragen ob Spiel gestartet wurde
  */
-bool getStateSnakeGame(void);
+bool snakeGameStarted(void);
+
+static void SnakeTask(void *pvParameters);
 
 /*!
  * \brief Driver de-initialization.

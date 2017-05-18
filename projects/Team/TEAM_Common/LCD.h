@@ -47,6 +47,8 @@ typedef enum {
 void LCD_SetEvent(LCD_BTN_Events event);
 #endif
 
+void updateLCD(void);
+
 /*!
  * \brief Driver de-initialization
  */
