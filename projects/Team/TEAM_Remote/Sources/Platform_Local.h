@@ -42,7 +42,7 @@
 //#define PL_LOCAL_CONFIG_HAS_SHELL_QUEUE_DISABLED          /* disable shell queue */
 #define PL_LOCAL_CONFIG_HAS_SQUEUE_SINGLE_CHAR_DISABLED   /* disable single character support in shell queue */ // for using pointer to string
 //#define PL_LOCAL_CONFIG_HAS_SEMAPHORE_DISABLED            /* disable semaphore test module */
-#define PL_LOCAL_CONFIG_HAS_CONFIG_NVM_DISABLED           /* disable NVM storage */
+//#define PL_LOCAL_CONFIG_HAS_CONFIG_NVM_DISABLED           /* disable NVM storage */
 
 /* remote controller hardware functionality */
 #define PL_LOCAL_CONFIG_HAS_RADIO_DISABLED                /* disable Radio transceiver */
@@ -52,6 +52,8 @@
 #define PL_LOCAL_CONFIG_HAS_JOYSTICK_DISABLED             /* disable joystick */
 //#define PL_LOCAL_CONFIG_HAS_LCD_DISABLED                  /* disable LCD */
 //#define PL_LOCAL_CONFIG_HAS_LCD_MENU_DISABLED             /* disable LCD menu */
+//added for snake game
+//#define PL_LOCAL_CONFIG_HAS_SNAKE_GAME_DISABLED			/*disable snake game
 
 /* robot hardware functionality */
 #define PL_LOCAL_CONFIG_HAS_MOTOR_DISABLED                /* disable motor */
