@@ -444,7 +444,6 @@ void startSnakeGame(void) {
 
 bool snakeGameStarted(void) {
 	return started;
-	//return uxSemaphoreGetCount(xSemaphoreSnakeGame); 	//1 is returned if the semaphore is available, and 0 is returned if the semaphore is not available.
 }
 
 static void SnakeTask(void *pvParameters) {
