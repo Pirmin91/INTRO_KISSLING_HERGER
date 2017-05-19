@@ -40,6 +40,9 @@
   static xSemaphoreHandle REF_StartStopSem = NULL;
 #endif
 
+/*! \todo added semaphore */
+static xSemaphoreHandle mutexHandle;
+
 typedef enum {
   REF_STATE_INIT,
   REF_STATE_NOT_CALIBRATED,
@@ -113,7 +116,7 @@ static const SensorFctType SensorFctArray[REF_NOF_SENSORS] = {
   {S6_SetOutput, S6_SetInput, S6_SetVal, S6_GetVal},
 };
 
-#if PL_CONFIG_HAS_LINE_MAZE
+#if 1 || PL_CONFIG_HAS_LINE_MAZE
 void REF_GetSensorValues(uint16_t *values, int nofValues) {
   int i;
 
@@ -141,10 +144,16 @@ static void REF_MeasureRaw(SensorTimeType raw[REF_NOF_SENSORS]) {
   uint8_t i;
   RefCnt_TValueType timerVal;
   /*! \todo Consider reentrancy and mutual exclusion! */
+#if 1 /*! \todo added timout */
+  #define REF_SENSOR_TIMEOUT_US  1500
+  const RefCnt_TValueType timeoutCntVal = ((RefCnt_CNT_INP_FREQ_U_0/1000)*REF_SENSOR_TIMEOUT_US)/1000 /* REF_SENSOR_TIMEOUT_US translated into timeout ticks */;
+  bool isTimeout = FALSE;
+#endif
 
-  //Ablauf Messung siehe Folie 13 "SW10c Reflectance.pdf"
+  (void)xSemaphoreTake(mutexHandle, portMAX_DELAY);
   LED_IR_On(); /* IR LED's on */
   WAIT1_Waitus(200);
+  taskENTER_CRITICAL();
   for(i=0;i<REF_NOF_SENSORS;i++) {
     SensorFctArray[i].SetOutput(); /* turn I/O line as output */
     SensorFctArray[i].SetVal(); /* put high */
@@ -157,6 +166,12 @@ static void REF_MeasureRaw(SensorTimeType raw[REF_NOF_SENSORS]) {
   (void)RefCnt_ResetCounter(timerHandle); /* reset timer counter */
   do {
     timerVal = RefCnt_GetCounterValue(timerHandle);
+#if 1 /*! \todo add timeout */
+    if (timerVal>timeoutCntVal) {
+      isTimeout = TRUE;
+      break; /* get out of while loop */
+    }
+#endif
     cnt = 0;
     for(i=0;i<REF_NOF_SENSORS;i++) {
       if (raw[i]==MAX_SENSOR_VALUE) { /* not measured yet? */
@@ -168,7 +183,18 @@ static void REF_MeasureRaw(SensorTimeType raw[REF_NOF_SENSORS]) {
       }
     }
   } while(cnt!=REF_NOF_SENSORS);
+  taskEXIT_CRITICAL();
   LED_IR_Off(); /* IR LED's off */
+#if 1 /*! \todo added timeout */
+  if (isTimeout) {
+    for(i=0;i<REF_NOF_SENSORS;i++) {
+      if (raw[i]==MAX_SENSOR_VALUE) { /* not measured yet? */
+        raw[i] = SensorCalibMinMax.maxVal[i]; /* use calibrated max value */
+      }
+    } /* for */
+  }
+#endif
+  (void)xSemaphoreGive(mutexHandle);
 }
 
 static void REF_CalibrateMinMax(SensorTimeType min[REF_NOF_SENSORS], SensorTimeType max[REF_NOF_SENSORS], SensorTimeType raw[REF_NOF_SENSORS]) {
@@ -327,7 +353,7 @@ static REF_LineKind ReadLineKind(SensorTimeType val[REF_NOF_SENSORS]) {
 }
 #endif
 
-#if PL_CONFIG_HAS_LINE_FOLLOW
+#if 1 || PL_CONFIG_HAS_LINE_FOLLOW
 static REF_LineKind refLineKind = REF_LINE_NONE;
 
 REF_LineKind REF_GetLineKind(void) {
@@ -338,7 +364,7 @@ REF_LineKind REF_GetLineKind(void) {
 static void REF_Measure(void) {
   ReadCalibrated(SensorCalibrated, SensorRaw);
   refCenterLineVal = ReadLine(SensorCalibrated, SensorRaw, REF_USE_WHITE_LINE);
-#if PL_CONFIG_HAS_LINE_FOLLOW
+#if 1 || PL_CONFIG_HAS_LINE_FOLLOW
   refLineKind = ReadLineKind(SensorCalibrated);
 #endif
 }
@@ -366,7 +392,7 @@ static unsigned char*REF_GetStateString(void) {
   return (unsigned char*)"UNKNOWN";
 }
 
-#if PL_CONFIG_HAS_LINE_FOLLOW
+#if 1 || PL_CONFIG_HAS_LINE_FOLLOW
 static unsigned char *REF_LineKindStr(REF_LineKind line) {
   switch(line) {
   case REF_LINE_NONE:
@@ -451,7 +477,7 @@ static uint8_t PrintStatus(const CLS1_StdIOType *io) {
   CLS1_SendStr(buf, io->stdOut);
   CLS1_SendStr((unsigned char*)"\r\n", io->stdOut);
 
-#if PL_CONFIG_HAS_LINE_FOLLOW
+#if 1 || PL_CONFIG_HAS_LINE_FOLLOW
   CLS1_SendStatusStr((unsigned char*)"  line kind", REF_LineKindStr(refLineKind), io->stdOut);
   CLS1_SendStr((unsigned char*)"\r\n", io->stdOut);
 #endif
@@ -500,7 +526,7 @@ static void REF_StateMachine(void) {
 
       ptr = (SensorCalibT*)NVMC_GetReflectanceData();
       if (ptr!=NULL) { /* valid data */
-        SensorCalibMinMax = *ptr;
+        SensorCalibMinMax = *ptr; /* struct copy */
         refState = REF_STATE_READY;
       } else {
         refState = REF_STATE_NOT_CALIBRATED;
@@ -589,13 +615,19 @@ void REF_Init(void) {
     for(;;){} /* error */
   }
   (void)xSemaphoreTake(REF_StartStopSem, 0); /* empty token */
-  FRTOS1_vQueueAddToRegistry(REF_StartStopSem, "RefStartStopSem");
+  vQueueAddToRegistry(REF_StartStopSem, "RefStartStopSem");
 #endif
   /*! \todo add extra mutex if needed */
+  mutexHandle = xSemaphoreCreateMutex();
+  if (mutexHandle==NULL) {
+    for(;;);
+  }
+  vQueueAddToRegistry(mutexHandle, "RefSem");
+
   refState = REF_STATE_INIT;
   timerHandle = RefCnt_Init(NULL);
   /*! \todo You might need to adjust priority or other task settings */
-  if (FRTOS1_xTaskCreate(ReflTask, "Refl", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
+  if (xTaskCreate(ReflTask, "Refl", 600/sizeof(StackType_t), NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
     for(;;){} /* error */
   }
 }

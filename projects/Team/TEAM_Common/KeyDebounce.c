@@ -13,6 +13,7 @@
 #include "Debounce.h"
 #include "Trigger.h"
 #include "Event.h"
+#include "Sumo.h"
 
 /*!
  * \brief Returns the state of the keys. This directly reflects the value of the port
@@ -77,6 +78,14 @@ static void KEYDBNC_OnDebounceEvent(DBNC_EventKinds event, DBNC_KeySet keys) {
 	#if PL_CONFIG_HAS_SNAKE_GAME
 		EVNT_SetEvent(EVNT_SNAKE_BTN_RIGHT);
 	#endif
+	/*#if PL_CONFIG_HAS_SUMO
+		if (!SUMO_IsRunningSumo) {		//Wenn Sumo Modus noch nicht gestartet
+			SUMO_StartSumo();
+		}
+		else {
+			SUMO_StopSumo();
+		}
+	#endif*/
       }
 #endif
 #if PL_CONFIG_NOF_KEYS >= 2

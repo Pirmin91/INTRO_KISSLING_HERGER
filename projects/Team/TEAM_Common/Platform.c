@@ -83,6 +83,10 @@
   #include "Snake.h"
 #endif
 
+#if PL_CONFIG_HAS_SUMO /*! \todo */
+  #include "Sumo.h"
+#endif
+
 void PL_Init(void) {
 #if PL_CONFIG_HAS_LEDS
   LED_Init();
@@ -156,9 +160,12 @@ void PL_Init(void) {
 #if PL_CONFIG_HAS_BATTERY_ADC
   BATT_Init();
 #endif
-//added for snake game
+//added
 #if PL_CONFIG_HAS_SNAKE_GAME
   SNAKE_Init();
+#endif
+#if PL_CONFIG_HAS_SUMO
+  SUMO_Init();
 #endif
 }
 

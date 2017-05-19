@@ -57,6 +57,9 @@
 #if PL_CONFIG_HAS_TURN
   #include "Turn.h"
 #endif
+#if PL_CONFIG_HAS_SUMO
+  #include "Sumo.h"
+#endif
 #if PL_CONFIG_HAS_LINE_FOLLOW
   #include "LineFollow.h"
 #endif
@@ -263,6 +266,9 @@ static const CLS1_ParseCommandCallback CmdParserTable[] =
 #endif
 #if PL_CONFIG_HAS_TURN
   TURN_ParseCommand,
+#endif
+#if PL_CONFIG_HAS_SUMO
+  SUMO_ParseCommand,
 #endif
 #if PL_CONFIG_HAS_LINE_FOLLOW
   LF_ParseCommand,
