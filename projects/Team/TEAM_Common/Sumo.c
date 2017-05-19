@@ -88,7 +88,7 @@ static void SumoTask(void* param) {
   sumoState = SUMO_STATE_IDLE;
   for(;;) {
     SumoRun();
-    vTaskDelay(pdMS_TO_TICKS(10));
+    FRTOS1_vTaskDelay(10/portTICK_PERIOD_MS);
   }
 }
 
