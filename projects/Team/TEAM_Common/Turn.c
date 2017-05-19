@@ -12,6 +12,7 @@
 #include "WAIT1.h"
 #include "Motor.h"
 #include "UTIL1.h"
+#include "KIN1.h" // data type for RoboIDs
 #if PL_CONFIG_HAS_SHELL
   #include "CLS1.h"
   #include "Shell.h"
@@ -25,6 +26,12 @@
 #if PL_CONFIG_HAS_DRIVE
   #include "Drive.h"
 #endif
+
+/* RobotID's of L1 and L6 */
+static const KIN1_UID RoboIDs[] = {
+  /* 6: L6, V1 */  {{0x00,0x17,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x4E,0x45,0x27,0x99,0x10,0x02,0x00,0x06}},
+  /* 1: L1, V1 */  {{0x00,0x19,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x4E,0x45,0x27,0x99,0x10,0x02,0x00,0x25}},
+};
 
 /*! \todo adopt the values for your robot */
 #define TURN_STEPS_90         700	// default-Wert 800
@@ -41,6 +48,27 @@
 static int32_t TURN_Steps90 = TURN_STEPS_90;
 static int32_t TURN_StepsLine = TURN_STEPS_LINE;
 static int32_t TURN_StepsPostLine = TURN_STEPS_POST_LINE;
+
+/* Number of TURN_STEPS_90 for L1 or L6 */
+static void TURN_AdoptToHardware(void) {
+  KIN1_UID id;
+  uint8_t res;
+
+  res = KIN1_UIDGet(&id);
+  if (res!=ERR_OK) {
+    for(;;); /* error */
+  }
+
+	#if PL_CONFIG_HAS_MOTOR
+  /* Robot L6 */
+  if (KIN1_UIDSame(&id, &RoboIDs[0])) {
+	  	TURN_Steps90 = 700;	// default value 800
+	/* Robot L1 */
+	} else if (KIN1_UIDSame(&id, &RoboIDs[1])) {
+		TURN_Steps90 = 700;	// default value 800
+	}
+	#endif
+}
 
 /*!
  * \brief Translate a turn kind into a string
@@ -313,9 +341,11 @@ uint8_t TURN_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_St
 void TURN_Deinit(void) {
 }
 
-void TURN_Init(void) {
-  TURN_Steps90 = TURN_STEPS_90;
-  TURN_StepsPostLine = TURN_STEPS_POST_LINE;
-  TURN_StepsLine = TURN_STEPS_LINE;
+void TURN_Init(void)
+{
+	TURN_AdoptToHardware(); // number of steps for 90 degree based on L1 oder L6
+	//TURN_Steps90 = TURN_STEPS_90;
+	TURN_StepsPostLine = TURN_STEPS_POST_LINE;
+	TURN_StepsLine = TURN_STEPS_LINE;
 }
 #endif /* PL_CONFIG_HAS_TURN */

@@ -9,10 +9,17 @@
 #include "Pid.h"
 #include "Motor.h"
 #include "UTIL1.h"
+#include "KIN1.h" // data type for RoboIDs
 #if PL_CONFIG_HAS_SHELL
   #include "CLS1.h"
 #endif
 #include "Reflectance.h"
+
+/* RobotID's of L1 and L6 */
+static const KIN1_UID RoboIDs[] = {
+  /* 6: L6, V1 */  {{0x00,0x17,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x4E,0x45,0x27,0x99,0x10,0x02,0x00,0x06}},
+  /* 1: L1, V1 */  {{0x00,0x19,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x4E,0x45,0x27,0x99,0x10,0x02,0x00,0x25}},
+};
 
 /*! \todo Add your own additional configurations as needed */
 static PID_Config lineFwConfig;
@@ -413,8 +420,201 @@ void PID_Deinit(void) {
   /* nothing needed */
 }
 
+/* Number of TURN_STEPS_90 for L1 or L6 */
+static void PID_AdoptToHardware(void) {
+  KIN1_UID id;
+  uint8_t res;
+
+  res = KIN1_UIDGet(&id);
+  if (res!=ERR_OK) {
+    for(;;); /* error */
+  }
+
+	#if PL_CONFIG_HAS_PID
+  /* Robot L6 */
+  if (KIN1_UIDSame(&id, &RoboIDs[0]))
+  {
+	/*! \todo determine your PID values */
+	#if 0
+	  speedLeftConfig.pFactor100 = 0;
+	  speedLeftConfig.iFactor100 = 0;
+	  speedLeftConfig.dFactor100 = 0;
+	  speedLeftConfig.iAntiWindup = 0;
+	  speedLeftConfig.lastError = 0;
+	  speedLeftConfig.integral = 0;
+
+	  speedRightConfig.pFactor100 = 0;
+	  speedRightConfig.iFactor100 = 0;
+	  speedRightConfig.dFactor100 = 0;
+	  speedRightConfig.iAntiWindup = 0;
+	  speedRightConfig.lastError = 0;
+	  speedRightConfig.integral = 0;
+	#else
+	  //eigene Werte
+	  speedLeftConfig.pFactor100 = 2100;
+	  speedLeftConfig.iFactor100 = 60;
+	  speedLeftConfig.dFactor100 = 0;
+	  speedLeftConfig.iAntiWindup = 35000;
+	  speedLeftConfig.lastError = 0;
+	  speedLeftConfig.integral = 0;
+
+	  speedRightConfig.pFactor100 = 2100;
+	  speedRightConfig.iFactor100 = 60;
+	  speedRightConfig.dFactor100 = 0;
+	  speedRightConfig.iAntiWindup = 35000;
+	  speedRightConfig.lastError = 0;
+	  speedRightConfig.integral = 0;
+	#endif
+	  lineFwConfig.pFactor100 = 0;
+	  lineFwConfig.iFactor100 = 0;
+	  lineFwConfig.dFactor100 = 0;
+	  lineFwConfig.iAntiWindup = 0;
+	  lineFwConfig.maxSpeedPercent = 0;
+	  lineFwConfig.lastError = 0;
+	  lineFwConfig.integral = 0;
+
+	#if 0
+	  posLeftConfig.pFactor100 = 0;
+	  posLeftConfig.iFactor100 = 0;
+	  posLeftConfig.dFactor100 = 0;
+	  posLeftConfig.iAntiWindup = 0;
+	  posLeftConfig.maxSpeedPercent = 0;
+	  posRightConfig.pFactor100 = 0;
+	  posRightConfig.iFactor100 = 0;
+	  posRightConfig.dFactor100 = 0;
+	  posRightConfig.iAntiWindup = 0;
+	  posRightConfig.maxSpeedPercent = 0;
+	#else
+	  // Werte von Herr Styger für Position PID
+	  /*
+	  posLeftConfig.pFactor100 = 1000;
+	  posLeftConfig.iFactor100 = 2;
+	  posLeftConfig.dFactor100 = 50;
+	  posLeftConfig.iAntiWindup = 200;
+	  posLeftConfig.maxSpeedPercent = 50;
+	  posRightConfig.pFactor100 = 1000;
+	  posRightConfig.iFactor100 = 2;
+	  posRightConfig.dFactor100 = 50;
+	  posRightConfig.iAntiWindup = 200;
+	  posRightConfig.maxSpeedPercent = 50;
+	  */
+
+	  // Eigene Werte
+	  posLeftConfig.pFactor100 = 400;
+	  posLeftConfig.iFactor100 = 2;
+	  posLeftConfig.dFactor100 = 50;
+	  posLeftConfig.iAntiWindup = 150;
+	  posLeftConfig.maxSpeedPercent = 40;
+	  posRightConfig.pFactor100 = 400;
+	  posRightConfig.iFactor100 = 2;
+	  posRightConfig.dFactor100 = 50;
+	  posRightConfig.iAntiWindup = 150;
+	  posRightConfig.maxSpeedPercent = 40;
+
+	#endif
+	  posLeftConfig.lastError = 0;
+	  posLeftConfig.integral = 0;
+	  posRightConfig.lastError = posLeftConfig.lastError;
+	  posRightConfig.integral = posLeftConfig.integral;
+  }
+
+
+	/* Robot L1 */
+	else if (KIN1_UIDSame(&id, &RoboIDs[1]))
+	{
+	/*! \todo determine your PID values */
+	#if 0
+	  speedLeftConfig.pFactor100 = 0;
+	  speedLeftConfig.iFactor100 = 0;
+	  speedLeftConfig.dFactor100 = 0;
+	  speedLeftConfig.iAntiWindup = 0;
+	  speedLeftConfig.lastError = 0;
+	  speedLeftConfig.integral = 0;
+
+	  speedRightConfig.pFactor100 = 0;
+	  speedRightConfig.iFactor100 = 0;
+	  speedRightConfig.dFactor100 = 0;
+	  speedRightConfig.iAntiWindup = 0;
+	  speedRightConfig.lastError = 0;
+	  speedRightConfig.integral = 0;
+	#else
+	  //eigene Werte
+	  speedLeftConfig.pFactor100 = 2100;
+	  speedLeftConfig.iFactor100 = 60;
+	  speedLeftConfig.dFactor100 = 0;
+	  speedLeftConfig.iAntiWindup = 35000;
+	  speedLeftConfig.lastError = 0;
+	  speedLeftConfig.integral = 0;
+
+	  speedRightConfig.pFactor100 = 2100;
+	  speedRightConfig.iFactor100 = 60;
+	  speedRightConfig.dFactor100 = 0;
+	  speedRightConfig.iAntiWindup = 35000;
+	  speedRightConfig.lastError = 0;
+	  speedRightConfig.integral = 0;
+	#endif
+	  lineFwConfig.pFactor100 = 0;
+	  lineFwConfig.iFactor100 = 0;
+	  lineFwConfig.dFactor100 = 0;
+	  lineFwConfig.iAntiWindup = 0;
+	  lineFwConfig.maxSpeedPercent = 0;
+	  lineFwConfig.lastError = 0;
+	  lineFwConfig.integral = 0;
+
+	#if 0
+	  posLeftConfig.pFactor100 = 0;
+	  posLeftConfig.iFactor100 = 0;
+	  posLeftConfig.dFactor100 = 0;
+	  posLeftConfig.iAntiWindup = 0;
+	  posLeftConfig.maxSpeedPercent = 0;
+	  posRightConfig.pFactor100 = 0;
+	  posRightConfig.iFactor100 = 0;
+	  posRightConfig.dFactor100 = 0;
+	  posRightConfig.iAntiWindup = 0;
+	  posRightConfig.maxSpeedPercent = 0;
+	#else
+	  // Werte von Herr Styger für Position PID
+	  /*
+	  posLeftConfig.pFactor100 = 1000;
+	  posLeftConfig.iFactor100 = 2;
+	  posLeftConfig.dFactor100 = 50;
+	  posLeftConfig.iAntiWindup = 200;
+	  posLeftConfig.maxSpeedPercent = 50;
+	  posRightConfig.pFactor100 = 1000;
+	  posRightConfig.iFactor100 = 2;
+	  posRightConfig.dFactor100 = 50;
+	  posRightConfig.iAntiWindup = 200;
+	  posRightConfig.maxSpeedPercent = 50;
+	  */
+
+	  // Eigene Werte
+	  posLeftConfig.pFactor100 = 400;
+	  posLeftConfig.iFactor100 = 2;
+	  posLeftConfig.dFactor100 = 50;
+	  posLeftConfig.iAntiWindup = 150;
+	  posLeftConfig.maxSpeedPercent = 40;
+	  posRightConfig.pFactor100 = 400;
+	  posRightConfig.iFactor100 = 2;
+	  posRightConfig.dFactor100 = 50;
+	  posRightConfig.iAntiWindup = 150;
+	  posRightConfig.maxSpeedPercent = 40;
+
+	#endif
+	  posLeftConfig.lastError = 0;
+	  posLeftConfig.integral = 0;
+	  posRightConfig.lastError = posLeftConfig.lastError;
+	  posRightConfig.integral = posLeftConfig.integral;
+
+	}
+#endif
+}
+
 void PID_Init(void) {
+	// pid values based on L1 oder L6
+	PID_AdoptToHardware();
+
   /*! \todo determine your PID values */
+	/*
 #if 0
   speedLeftConfig.pFactor100 = 0;
   speedLeftConfig.iFactor100 = 0;
@@ -478,7 +678,7 @@ void PID_Init(void) {
   posRightConfig.iAntiWindup = 200;
   posRightConfig.maxSpeedPercent = 50;
   */
-
+/*
   // Eigene Werte
   posLeftConfig.pFactor100 = 400;
   posLeftConfig.iFactor100 = 2;
@@ -496,7 +696,7 @@ void PID_Init(void) {
   posLeftConfig.integral = 0;
   posRightConfig.lastError = posLeftConfig.lastError;
   posRightConfig.integral = posLeftConfig.integral;
-
+*/
 }
 
 #endif /* PL_CONFIG_HAS_PID */
