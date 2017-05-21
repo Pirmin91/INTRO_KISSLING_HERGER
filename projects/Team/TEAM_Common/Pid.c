@@ -588,7 +588,7 @@ static void PID_AdoptToHardware(void) {
 	  */
 
 	  // Eigene Werte
-	  posLeftConfig.pFactor100 = 400;
+	  /*posLeftConfig.pFactor100 = 400;
 	  posLeftConfig.iFactor100 = 2;
 	  posLeftConfig.dFactor100 = 50;
 	  posLeftConfig.iAntiWindup = 150;
@@ -597,8 +597,19 @@ static void PID_AdoptToHardware(void) {
 	  posRightConfig.iFactor100 = 2;
 	  posRightConfig.dFactor100 = 50;
 	  posRightConfig.iAntiWindup = 150;
-	  posRightConfig.maxSpeedPercent = 40;
+	  posRightConfig.maxSpeedPercent = 40;*/
 
+	  //Test fuer optimierte Werte
+	  posLeftConfig.pFactor100 = 350;
+	  posLeftConfig.iFactor100 = 5;
+	  posLeftConfig.dFactor100 = 20;
+	  posLeftConfig.iAntiWindup = 50;
+	  posLeftConfig.maxSpeedPercent = 70;
+	  posRightConfig.pFactor100 = 350;
+	  posRightConfig.iFactor100 = 5;
+	  posRightConfig.dFactor100 = 20;
+	  posRightConfig.iAntiWindup = 50;
+	  posRightConfig.maxSpeedPercent = 70;
 	#endif
 	  posLeftConfig.lastError = 0;
 	  posLeftConfig.integral = 0;
