@@ -46,8 +46,8 @@
 
 /* remote controller hardware functionality */
 //#define PL_LOCAL_CONFIG_HAS_RADIO_DISABLED                /* disable Radio transceiver */
-#define PL_LOCAL_CONFIG_HAS_REMOTE_STDIO_DISABLED         /* disable Std I/O over radio */
-#define PL_LOCAL_CONFIG_HAS_REMOTE_DISABLED               /* disable remote controller (sender and receiver) */
+//#define PL_LOCAL_CONFIG_HAS_REMOTE_STDIO_DISABLED         /* disable Std I/O over radio */
+//#define PL_LOCAL_CONFIG_HAS_REMOTE_DISABLED               /* disable remote controller (sender and receiver) */
 #define PL_LOCAL_CONFIG_HAS_CONTROL_SENDER_DISABLED       /* disable that we are the sender (otherwise we are the receiver) */
 #define PL_LOCAL_CONFIG_HAS_JOYSTICK_DISABLED             /* disable joystick */
 #define PL_LOCAL_CONFIG_HAS_LCD_DISABLED                  /* disable LCD */
@@ -70,6 +70,6 @@
 
 //#define PL_LOCAL_CONFIG_HAS_TURN_DISABLED                 /* disable turning module */
 #define PL_LOCAL_CONFIG_HAS_LINE_MAZE_DISABLED            /* disable maze solving */
-#define PL_LOCAL_CONFIG_HAS_BATTERY_ADC_DISABLED          /* disable battery ADC */
+//#define PL_LOCAL_CONFIG_HAS_BATTERY_ADC_DISABLED          /* disable battery ADC */
 
 #endif /* SOURCES_PLATFORM_LOCAL_H_ */

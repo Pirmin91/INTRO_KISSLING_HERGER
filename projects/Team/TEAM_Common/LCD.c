@@ -18,9 +18,9 @@
 #include "LCD_LED.h"
 #include "Event.h"
 #include "FRTOS1.h"
-//#if PL_CONFIG_HAS_RADIO //Lab 28: at the moment there is no Radio-Module
-//  #include "RApp.h"
-//#endif
+#if PL_CONFIG_HAS_RADIO  //Lab 28: at the moment there is no Radio-Module
+  #include "RApp.h"
+#endif
 #endif
 #include "LCDMenu.h"
 /*! \todo Add additional includes as needed */
@@ -353,9 +353,11 @@ static const LCDMenu_MenuItem menus[] =
 	  {LCD_MENU_ID_ROBOT,                     0,  1,   LCD_MENU_ID_NONE,          LCD_MENU_ID_PID,            		"Robot",        NULL,                         LCDMENU_MENU_FLAGS_NONE},
 	  {LCD_MENU_ID_PID,                       2,  0,   LCD_MENU_ID_ROBOT,         LCD_MENU_ID_P_VALUE,            	"PID",          NULL,                         LCDMENU_MENU_FLAGS_NONE},
 	  //für Remote Befehle
+#if PL_CONFIG_HAS_RADIO
       {LCD_MENU_ID_SUMO_START_STOP,           2,   1,   LCD_MENU_ID_ROBOT,        LCD_MENU_ID_NONE,                 NULL,           RobotRemoteMenuHandler,     LCDMENU_MENU_FLAGS_NONE},
       {LCD_MENU_ID_BATTERY_VOLTAGE,           2,   2,   LCD_MENU_ID_ROBOT,        LCD_MENU_ID_NONE,                 NULL,           RobotRemoteMenuHandler,     LCDMENU_MENU_FLAGS_NONE},
       {LCD_MENU_ID_MINT_TOF_SENSOR,           2,   3,   LCD_MENU_ID_ROBOT,        LCD_MENU_ID_NONE,                 NULL,           RobotRemoteMenuHandler,     LCDMENU_MENU_FLAGS_NONE},
+#endif
 	  //PID und anti reset windup
 	  {LCD_MENU_ID_P_VALUE,                   3,  0,   LCD_MENU_ID_PID,           LCD_MENU_ID_NONE,            	    NULL,           PChangeHandler,               LCDMENU_MENU_FLAGS_EDITABLE},
 	  {LCD_MENU_ID_I_VALUE,                   3,  1,   LCD_MENU_ID_PID,           LCD_MENU_ID_NONE,            	    NULL,           IChangeHandler,     	      LCDMENU_MENU_FLAGS_EDITABLE},
@@ -367,16 +369,19 @@ static const LCDMenu_MenuItem menus[] =
 };
 
 // Lab 29: there is no Radio-Module at the moment (reason of comment the function)
-//uint8_t LCD_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *data, RNWK_ShortAddrType srcAddr, bool *handled, RPHY_PacketDesc *packet) {
- // (void)size;
- // (void)packet;
-//  switch(type) {
- //    default:
- //     break;
-//  } /* switch */
- // return ERR_OK;
-//}
-//#endif /* PL_CONFIG_HAS_LCD_MENU */
+#if PL_CONFIG_HAS_RADIO
+uint8_t LCD_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *data, RNWK_ShortAddrType srcAddr, bool *handled, RPHY_PacketDesc *packet) {
+  (void)size;
+  (void)packet;
+  switch(type) {
+     default:
+      break;
+  } /* switch */
+  return ERR_OK;
+}
+#endif
+
+
 
 
 static void ShowTextOnLCD(unsigned char *text) {
@@ -520,4 +525,5 @@ void LCD_Init(void) {
   LCDMenu_Init();
 #endif
 }
-#endif /* PL_CONFIG_HAS_LCD */
+
+#endif /* PL_CONFIG_HAS_LCD_MENU */

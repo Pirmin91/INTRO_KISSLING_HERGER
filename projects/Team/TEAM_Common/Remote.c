@@ -48,6 +48,9 @@
 #if PL_CONFIG_HAS_LINE_FOLLOW
   #include "LineFollow.h"
 #endif
+#if PL_CONFIG_HAS_SUMO
+  #include "Sumo.h"
+#endif
 
 static bool REMOTE_isOn = FALSE;
 static bool REMOTE_isVerbose = FALSE;
@@ -299,7 +302,19 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     case RAPP_MSG_TYPE_REQUEST_SET_VALUE:
       id = UTIL1_GetValue16LE(data); /* extract 16bit ID (little endian) */
       /*!\ todo handle message*/
-      *handled = FALSE;
+      if (id==RAPP_MSG_TYPE_DATA_ID_START_STOP) {
+        *handled = FALSE;
+        beep =  TRUE;
+#if PL_CONFIG_HAS_SUMO
+        if (*data==0) {
+          //SUMO_StopSumo();
+          SUMO_StartStopSumo();
+        } else {
+          SUMO_StartStopSumo();
+          //SUMO_StartSumo();
+        }
+#endif
+      }
       break;
 
     case RAPP_MSG_TYPE_QUERY_VALUE:
@@ -315,6 +330,17 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
         *handled = TRUE;
         beep =  TRUE;
   #endif
+      } else if (id==RAPP_MSG_TYPE_DATA_ID_START_STOP) {
+          uint32_t val;
+
+  #if PL_CONFIG_HAS_SUMO
+          val = SUMO_IsRunningSumo()?1:0;
+  #else
+          val = 0; /* don't know? */
+  #endif
+          RNETA_SendIdValuePairMessage(RAPP_MSG_TYPE_QUERY_VALUE_RESPONSE, id,  val, srcAddr, RPHY_PACKET_FLAGS_NONE);
+          *handled = TRUE;
+          beep =  TRUE;
       } else if (id==RAPP_MSG_TYPE_DATA_ID_PID_FW_SPEED) {
         /*!\ todo handle message*/
         *handled = FALSE;
