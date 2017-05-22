@@ -13,6 +13,10 @@
 #include "Reflectance.h"
 #include "Turn.h"
 #include "CLS1.h"
+#include "Drive.h"
+#include "Q4CLeft.h"
+#include "Q4CRight.h"
+
 
 typedef enum {
   SUMO_STATE_IDLE,
@@ -22,6 +26,8 @@ typedef enum {
 
 static SUMO_State_t sumoState = SUMO_STATE_IDLE;
 static TaskHandle_t sumoTaskHndl;
+// set drive speed of robot
+static int32_t speed = 5000;
 
 /* direct task notification bits */
 #define SUMO_START_SUMO (1<<0)  /* start sumo mode */
@@ -55,7 +61,7 @@ static void SumoRun(void) {
     switch(sumoState) {
       case SUMO_STATE_IDLE:
         if ((notifcationValue&SUMO_START_SUMO) && REF_GetLineKind()==REF_LINE_FULL) {
-          DRV_SetSpeed(1000, 1000);
+          DRV_SetSpeed(speed, speed);
           //DRV_SetSpeed(200, 200);
           DRV_SetMode(DRV_MODE_SPEED);
           sumoState = SUMO_STATE_DRIVING;
@@ -75,8 +81,14 @@ static void SumoRun(void) {
         return;
       case SUMO_STATE_TURNING:
         DRV_SetMode(DRV_MODE_STOP);
+
+        // Try to drive backwards
+        DRV_SetMode(DRV_MODE_SPEED);
+        DRV_SetSpeed(-10000,-10000);
+        vTaskDelay(200/portTICK_PERIOD_MS);
         TURN_Turn(TURN_RIGHT180, NULL);
         DRV_SetMode(DRV_MODE_SPEED);
+        DRV_SetSpeed(speed, speed);
         sumoState = SUMO_STATE_DRIVING;
         break; /* handle next state */
 
