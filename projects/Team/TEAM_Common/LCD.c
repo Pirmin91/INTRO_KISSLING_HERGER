@@ -47,9 +47,31 @@ typedef enum {
   LCD_MENU_ID_W_VALUE,
   //für snake game
   LCD_MENU_ID_GAMES,
-  LCD_MENU_ID_SNAKE
-
+  LCD_MENU_ID_SNAKE,
+  //für remote befehle
+  LCD_MENU_ID_SUMO_START_STOP,
+  LCD_MENU_ID_BATTERY_VOLTAGE,
+  LCD_MENU_ID_MINT_TOF_SENSOR
 } LCD_MenuIDs;
+
+//für remote befehle
+static struct {
+  struct {
+    bool dataValid;
+    bool isRunning;
+    uint8_t str[sizeof("???????????")+1]; /* used to store menu string, either "Start" or "Stop" */
+  } sumo;
+  struct {
+    bool dataValid;
+    uint8_t mm[4]; /* ToF Sensor Values */
+    uint8_t str[sizeof("D:??:??:??:??")+1]; /* used to store menu string */
+  } tof;
+  struct {
+    bool dataValid;
+    uint16_t centiV;
+    uint8_t str[sizeof("Batt: ?.??V")+1]; /* used to store menu string */
+  } battVoltage;
+} remoteValues;
 
 static LCDMenu_StatusFlags ValueChangeHandler(const struct LCDMenu_MenuItem_ *item, LCDMenu_EventType event, void **dataP) {
   static int value = 0;
@@ -233,6 +255,95 @@ static LCDMenu_StatusFlags SnakeGameHandler(const struct LCDMenu_MenuItem_ *item
 	return flags;
 }
 
+//Handler für Remote Operationen
+#if PL_CONFIG_HAS_RADIO
+static LCDMenu_StatusFlags RobotRemoteMenuHandler(const struct LCDMenu_MenuItem_ *item, LCDMenu_EventType event, void **dataP) {
+  LCDMenu_StatusFlags flags = LCDMENU_STATUS_FLAGS_NONE;
+
+  if (event==LCDMENU_EVENT_GET_TEXT && dataP!=NULL) {
+    if (item->id==LCD_MENU_ID_MINT_TOF_SENSOR) {
+      //muss auskommentiert werden falls TOF Sensoren installiert
+      /*
+      unsigned int i;
+
+      UTIL1_strcpy(remoteValues.tof.str, sizeof(remoteValues.tof.str), (uint8_t*)"D:");
+      for(i=0;i<sizeof(remoteValues.tof.mm);i++) {
+        if (remoteValues.tof.dataValid) {
+          UTIL1_strcatNum8Hex(remoteValues.tof.str, sizeof(remoteValues.tof.str), remoteValues.tof.mm[i]);
+        } else {
+          UTIL1_strcat(remoteValues.tof.str, sizeof(remoteValues.tof.str), (uint8_t*)"??");
+        }
+        if (i<sizeof(remoteValues.tof.mm)-1) {
+          UTIL1_chcat(remoteValues.tof.str, sizeof(remoteValues.tof.str), ':');
+        }
+        *dataP = remoteValues.tof.str;
+      }
+      */
+      flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+    } else if (item->id==LCD_MENU_ID_SUMO_START_STOP) {
+      if (remoteValues.sumo.dataValid) { /* have valid data */
+        if (remoteValues.sumo.isRunning) {
+          UTIL1_strcpy(remoteValues.sumo.str, sizeof(remoteValues.sumo.str), (uint8_t*)"Start/Stop");
+        } else {
+          UTIL1_strcpy(remoteValues.sumo.str, sizeof(remoteValues.sumo.str), (uint8_t*)"Start/Stop");
+        }
+      } else { /* request values */
+        (void)RNETA_SendIdValuePairMessage(RAPP_MSG_TYPE_QUERY_VALUE, RAPP_MSG_TYPE_DATA_ID_START_STOP, 0, RNWK_ADDR_BROADCAST, RPHY_PACKET_FLAGS_NONE);
+        /* use ??? for now until we get the response */
+        UTIL1_strcpy(remoteValues.sumo.str, sizeof(remoteValues.sumo.str), (uint8_t*)"Start/Stop?");
+      }
+      *dataP = remoteValues.sumo.str;
+      flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+    } else if (item->id==LCD_MENU_ID_BATTERY_VOLTAGE) {
+      UTIL1_strcpy(remoteValues.battVoltage.str, sizeof(remoteValues.battVoltage.str), (uint8_t*)"Batt: ");
+      if (remoteValues.battVoltage.dataValid) { /* use valid data */
+        UTIL1_strcatNum32sDotValue100(remoteValues.battVoltage.str, sizeof(remoteValues.battVoltage.str), remoteValues.battVoltage.centiV);
+      } else { /* request value from robot */
+        (void)RNETA_SendIdValuePairMessage(RAPP_MSG_TYPE_QUERY_VALUE, RAPP_MSG_TYPE_DATA_ID_BATTERY_V, 0, RNWK_ADDR_BROADCAST, RPHY_PACKET_FLAGS_NONE);
+        /* use ??? for now until we get the response */
+        UTIL1_strcat(remoteValues.battVoltage.str, sizeof(remoteValues.battVoltage.str), (uint8_t*)"?.??");
+      }
+      UTIL1_strcat(remoteValues.battVoltage.str, sizeof(remoteValues.battVoltage.str), (uint8_t*)"V");
+      *dataP = remoteValues.battVoltage.str;
+      flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+    }
+  } else if (event==LCDMENU_EVENT_ENTER || event==LCDMENU_EVENT_RIGHT) { /* force update */
+    uint16_t dataID = RAPP_MSG_TYPE_DATA_ID_NONE; /* default value, will be overwritten below */
+    uint8_t msgType = 0;
+    uint32_t value = 0;
+
+    switch(item->id) {
+      case LCD_MENU_ID_SUMO_START_STOP:
+        if (event==LCDMENU_EVENT_ENTER) {
+          msgType = RAPP_MSG_TYPE_REQUEST_SET_VALUE;
+          value = 1; /* start/stop */
+        } else {
+          msgType = RAPP_MSG_TYPE_QUERY_VALUE;
+          value = 0; /* don't care */
+        }
+        dataID = RAPP_MSG_TYPE_DATA_ID_START_STOP;
+        break;
+      case LCD_MENU_ID_MINT_TOF_SENSOR:
+        remoteValues.tof.dataValid = FALSE;
+        msgType = RAPP_MSG_TYPE_QUERY_VALUE;
+        dataID = RAPP_MSG_TYPE_DATA_ID_TOF_VALUES;
+        value = 0; /* don't care */
+        break;
+      case LCD_MENU_ID_BATTERY_VOLTAGE:
+        remoteValues.battVoltage.dataValid = FALSE;
+        msgType = RAPP_MSG_TYPE_QUERY_VALUE;
+        dataID = RAPP_MSG_TYPE_DATA_ID_BATTERY_V;
+        value = 0; /* don't care */
+        break;
+    }
+    if (dataID!=RAPP_MSG_TYPE_DATA_ID_NONE) { /* request data */
+      (void)RNETA_SendIdValuePairMessage(msgType, dataID, value, RNWK_ADDR_BROADCAST, RPHY_PACKET_FLAGS_NONE);
+      flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+    }
+  }
+  return flags;
+}
+#endif
 static const LCDMenu_MenuItem menus[] =
 {/* id,                                     grp, pos,   up,                       down,                             text,           callback                      flags                  */
     {LCD_MENU_ID_MAIN,                        0,   0,   LCD_MENU_ID_NONE,         LCD_MENU_ID_BACKLIGHT,            "General",      NULL,                         LCDMENU_MENU_FLAGS_NONE},
@@ -241,6 +352,11 @@ static const LCDMenu_MenuItem menus[] =
 	 //eigene Menus
 	  {LCD_MENU_ID_ROBOT,                     0,  1,   LCD_MENU_ID_NONE,          LCD_MENU_ID_PID,            		"Robot",        NULL,                         LCDMENU_MENU_FLAGS_NONE},
 	  {LCD_MENU_ID_PID,                       2,  0,   LCD_MENU_ID_ROBOT,         LCD_MENU_ID_P_VALUE,            	"PID",          NULL,                         LCDMENU_MENU_FLAGS_NONE},
+	  //für Remote Befehle
+      {LCD_MENU_ID_SUMO_START_STOP,           2,   1,   LCD_MENU_ID_ROBOT,        LCD_MENU_ID_NONE,                 NULL,           RobotRemoteMenuHandler,     LCDMENU_MENU_FLAGS_NONE},
+      {LCD_MENU_ID_BATTERY_VOLTAGE,           2,   2,   LCD_MENU_ID_ROBOT,        LCD_MENU_ID_NONE,                 NULL,           RobotRemoteMenuHandler,     LCDMENU_MENU_FLAGS_NONE},
+      {LCD_MENU_ID_MINT_TOF_SENSOR,           2,   3,   LCD_MENU_ID_ROBOT,        LCD_MENU_ID_NONE,                 NULL,           RobotRemoteMenuHandler,     LCDMENU_MENU_FLAGS_NONE},
+	  //PID und anti reset windup
 	  {LCD_MENU_ID_P_VALUE,                   3,  0,   LCD_MENU_ID_PID,           LCD_MENU_ID_NONE,            	    NULL,           PChangeHandler,               LCDMENU_MENU_FLAGS_EDITABLE},
 	  {LCD_MENU_ID_I_VALUE,                   3,  1,   LCD_MENU_ID_PID,           LCD_MENU_ID_NONE,            	    NULL,           IChangeHandler,     	      LCDMENU_MENU_FLAGS_EDITABLE},
 	  {LCD_MENU_ID_D_VALUE,                   3,  2,   LCD_MENU_ID_PID,           LCD_MENU_ID_NONE,            	    NULL,           DChangeHandler,      		  LCDMENU_MENU_FLAGS_EDITABLE},

@@ -32,8 +32,10 @@ typedef enum {
 /* IDs for RAPP_MSG_TYPE_REQUEST_SET_VALUE, RAPP_MSG_TYPE_NOTIFY_VALUE, RAPP_MSG_TYPE_QUERY_VALUE and RAPP_MSG_TYPE_QUERY_VALUE_RESPONSE */
 typedef enum {
   RAPP_MSG_TYPE_DATA_ID_NONE = 0,           /* dummy ID */
+  RAPP_MSG_TYPE_DATA_ID_TOF_VALUES = 4,     /* ToF values: four 8bit values */
   RAPP_MSG_TYPE_DATA_ID_BATTERY_V = 7,      /* Battery voltage */
   RAPP_MSG_TYPE_DATA_ID_PID_FW_SPEED = 8,   /* PID forward speed */
+  RAPP_MSG_TYPE_DATA_ID_START_STOP = 9,     /* start/stop robot */
   /*! \todo extend as needed */
 } RAPP_MSG_DateIDType;
 
