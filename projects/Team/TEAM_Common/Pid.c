@@ -605,11 +605,13 @@ static void PID_AdoptToHardware(void) {
 	  posLeftConfig.dFactor100 = 20;
 	  posLeftConfig.iAntiWindup = 50;
 	  posLeftConfig.maxSpeedPercent = 70;
+	  //posLeftConfig.maxSpeedPercent = 20;
 	  posRightConfig.pFactor100 = 350;
 	  posRightConfig.iFactor100 = 5;
 	  posRightConfig.dFactor100 = 20;
 	  posRightConfig.iAntiWindup = 50;
 	  posRightConfig.maxSpeedPercent = 70;
+	  //posRightConfig.maxSpeedPercent = 20;
 	#endif
 	  posLeftConfig.lastError = 0;
 	  posLeftConfig.integral = 0;

@@ -56,6 +56,7 @@ static void SumoRun(void) {
       case SUMO_STATE_IDLE:
         if ((notifcationValue&SUMO_START_SUMO) && REF_GetLineKind()==REF_LINE_FULL) {
           DRV_SetSpeed(1000, 1000);
+          //DRV_SetSpeed(200, 200);
           DRV_SetMode(DRV_MODE_SPEED);
           sumoState = SUMO_STATE_DRIVING;
           break; /* handle next state */
@@ -78,6 +79,7 @@ static void SumoRun(void) {
         DRV_SetMode(DRV_MODE_SPEED);
         sumoState = SUMO_STATE_DRIVING;
         break; /* handle next state */
+
       default: /* should not happen? */
         return;
     } /* switch */
@@ -132,7 +134,7 @@ uint8_t SUMO_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_St
 }
 
 void SUMO_Init(void) {
-  if (xTaskCreate(SumoTask, "Sumo", 500/sizeof(StackType_t), NULL, tskIDLE_PRIORITY+2, &sumoTaskHndl) != pdPASS) {
+  if (xTaskCreate(SumoTask, "Sumo", 700/sizeof(StackType_t), NULL, tskIDLE_PRIORITY+2, &sumoTaskHndl) != pdPASS) {
     for(;;){} /* error case only, stay here! */
   }
 }

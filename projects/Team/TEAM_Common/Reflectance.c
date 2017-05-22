@@ -627,7 +627,8 @@ void REF_Init(void) {
   refState = REF_STATE_INIT;
   timerHandle = RefCnt_Init(NULL);
   /*! \todo You might need to adjust priority or other task settings */
-  if (xTaskCreate(ReflTask, "Refl", 600/sizeof(StackType_t), NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
+  //Dieser Task muss hohe Priorität haben, da er nur kurz ausgeführt wird und wichtig ist
+  if (xTaskCreate(ReflTask, "Refl", 700/sizeof(StackType_t), NULL, tskIDLE_PRIORITY+4, NULL) != pdPASS) {
     for(;;){} /* error */
   }
 }
