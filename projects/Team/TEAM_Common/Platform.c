@@ -82,7 +82,10 @@
 #if PL_CONFIG_HAS_SNAKE_GAME
   #include "Snake.h"
 #endif
-
+//added for ToF sensors
+#if PL_HAS_DISTANCE_SENSOR
+  #include "Distance.h"
+#endif
 #if PL_CONFIG_HAS_SUMO /*! \todo */
   #include "Sumo.h"
 #endif
@@ -167,6 +170,9 @@ void PL_Init(void) {
 #if PL_CONFIG_HAS_SUMO
   SUMO_Init();
 #endif
+#if PL_HAS_DISTANCE_SENSOR
+  DIST_Init();
+#endif
 }
 
 void PL_Deinit(void) {
@@ -238,5 +244,15 @@ void PL_Deinit(void) {
 #endif
 #if PL_CONFIG_HAS_LEDS
   LED_Deinit();
+#endif
+//added
+#if PL_CONFIG_HAS_SNAKE_GAME
+SNAKE_Deinit();
+#endif
+#if PL_CONFIG_HAS_SUMO
+SUMO_Deinit();
+#endif
+#if PL_HAS_DISTANCE_SENSOR
+DIST_Deinit();
 #endif
 }

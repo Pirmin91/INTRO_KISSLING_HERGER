@@ -66,6 +66,9 @@
 //#define PL_LOCAL_CONFIG_HAS_DRIVE_DISABLED                /* disable drive module */
 #define PL_LOCAL_CONFIG_HAS_LINE_FOLLOW_DISABLED          /* disable line following */
 
+//#define PL_LOCAL_CONFIG_HAS_DISTANCE_DISABLED             /* disabling distance sensors */
+//#define PL_LOCAL_CONFIG_HAS_TOF_SENSOR_DISABLED           /* disabling ToF sensors */
+
 //#define PL_LOCAL_PL_CONFIG_HAS_SUMO_DISABLED			  /* disable sumo
 
 //#define PL_LOCAL_CONFIG_HAS_TURN_DISABLED                 /* disable turning module */
