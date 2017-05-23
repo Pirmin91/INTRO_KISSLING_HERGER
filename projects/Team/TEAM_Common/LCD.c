@@ -262,8 +262,6 @@ static LCDMenu_StatusFlags RobotRemoteMenuHandler(const struct LCDMenu_MenuItem_
 
   if (event==LCDMENU_EVENT_GET_TEXT && dataP!=NULL) {
     if (item->id==LCD_MENU_ID_MINT_TOF_SENSOR) {
-      //muss auskommentiert werden falls TOF Sensoren installiert
-      /*
       unsigned int i;
 
       UTIL1_strcpy(remoteValues.tof.str, sizeof(remoteValues.tof.str), (uint8_t*)"D:");
@@ -278,7 +276,6 @@ static LCDMenu_StatusFlags RobotRemoteMenuHandler(const struct LCDMenu_MenuItem_
         }
         *dataP = remoteValues.tof.str;
       }
-      */
       flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
     } else if (item->id==LCD_MENU_ID_SUMO_START_STOP) {
       if (remoteValues.sumo.dataValid) { /* have valid data */

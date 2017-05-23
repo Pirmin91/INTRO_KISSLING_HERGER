@@ -29,6 +29,7 @@
 #if PL_CONFIG_HAS_LCD
   #include "LCD.h"
 #endif
+#include "KIN1.h" // data type for RoboIDs
 
 static RNWK_ShortAddrType APP_dstAddr = RNWK_ADDR_BROADCAST; /* destination node address */
 
@@ -39,6 +40,37 @@ typedef enum {
 } RNETA_State;
 
 static RNETA_State appState = RNETA_NONE;
+
+/* RobotID's of L1 and L6 */
+static const KIN1_UID RoboIDs[] = {
+  /* 6: L6, V1 */  {{0x00,0x17,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x4E,0x45,0x27,0x99,0x10,0x02,0x00,0x06}},
+  /* 1: L1, V1 */  {{0x00,0x19,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x4E,0x45,0x27,0x99,0x10,0x02,0x00,0x25}},
+};
+
+//Channel Number for L1 & L6
+uint8_t channelRobot6 = 45;
+uint8_t channelRobot1 = 46;
+
+/* Channel Number for L1 or L6 */
+static void RNETA_AdoptToHardware(void) {
+  KIN1_UID id;
+  uint8_t res;
+
+  res = KIN1_UIDGet(&id);
+  if (res!=ERR_OK) {
+    for(;;); /* error */
+  }
+  /* Robot L6 */
+  if (KIN1_UIDSame(&id, &RoboIDs[0]))
+  {
+	RNET1_SetChannel(channelRobot6);
+  }
+  /* Robot L1 */
+  else if (KIN1_UIDSame(&id, &RoboIDs[1]))
+  {
+    RNET1_SetChannel(channelRobot1);
+  }
+}
 
 RNWK_ShortAddrType RNETA_GetDestAddr(void) {
   return APP_dstAddr;
@@ -259,6 +291,7 @@ void RNETA_Init(void) {
   if (RAPP_SetMessageHandlerTable(handlerTable)!=ERR_OK) { /* assign application message handler */
     //APP_DebugPrint((unsigned char*)"ERR: failed setting message handler!\r\n");
   }
+  RNETA_AdoptToHardware();	//Channel abhängig des Roboters einstellen
   if (FRTOS1_xTaskCreate(
         RadioTask,  /* pointer to the task */
         "Radio", /* task name for kernel awareness debugging */
