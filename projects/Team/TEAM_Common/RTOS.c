@@ -35,7 +35,7 @@ void RTOS_Init(void) {
 	BaseType_t res;
 	xTaskHandle taskHndl ;
 	res = xTaskCreate(MainTask,"Main",configMINIMAL_STACK_SIZE+50 /*1kByte Stack*/,
-		(void*)NULL,tskIDLE_PRIORITY+1 /*um eins höhere Prio als idle task*/,&taskHndl);
+		(void*)NULL,tskIDLE_PRIORITY+3 /*um drei höhere Prio als idle task*/,&taskHndl);
 	//error handling
 	if ( res!=pdPASS) {
 		/*! \todo do Error Handling here */
@@ -66,16 +66,16 @@ void RTOS_Deinit(void) {
 
 static void MainTask(void *pvParameters) {
 	for(;;) {
-		//Blinking an LED
-		//LEDPin1_NegVal();
+		//Blinking an LED um zu zeigen dass main Task läuft
+		LEDPin1_NegVal();
 #if PL_LOCAL_CONFIG_BOARD_IS_ROBO
-		//LEDPin2_NegVal();
+		LEDPin2_NegVal();
 #endif
 		//vTaskDelay(200/portTICK_PERIOD_MS);		//200ms Blinkperiode
 		//Lab 28 Key Polling mit Debounce für LCD Anzeige
 		//KEY_Scan();
 		KEYDBNC_Process(); // Falls ein Button gedrückt wird, wird mit dieser Funktion entprellt
-		vTaskDelay(200/portTICK_PERIOD_MS);		//200ms Blinkperiode
+		vTaskDelay(400/portTICK_PERIOD_MS);		//200ms Blinkperiode
 
 		EVNT_HandleEvent(APP_EventHandler, TRUE);	//Eventhandler aufrufen
 	}

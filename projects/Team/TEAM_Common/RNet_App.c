@@ -291,7 +291,7 @@ void RNETA_Init(void) {
   if (RAPP_SetMessageHandlerTable(handlerTable)!=ERR_OK) { /* assign application message handler */
     //APP_DebugPrint((unsigned char*)"ERR: failed setting message handler!\r\n");
   }
-  RNETA_AdoptToHardware();	//Channel abhängig des Roboters einstellen
+  //RNETA_AdoptToHardware();	//Channel abhängig des Roboters einstellen
   if (FRTOS1_xTaskCreate(
         RadioTask,  /* pointer to the task */
         "Radio", /* task name for kernel awareness debugging */

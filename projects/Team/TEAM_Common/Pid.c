@@ -504,12 +504,12 @@ static void PID_AdoptToHardware(void) {
 	  posLeftConfig.iFactor100 = 2;
 	  posLeftConfig.dFactor100 = 50;
 	  posLeftConfig.iAntiWindup = 150;
-	  posLeftConfig.maxSpeedPercent = 40;
+	  posLeftConfig.maxSpeedPercent = 70;
 	  posRightConfig.pFactor100 = 400;
 	  posRightConfig.iFactor100 = 2;
 	  posRightConfig.dFactor100 = 50;
 	  posRightConfig.iAntiWindup = 150;
-	  posRightConfig.maxSpeedPercent = 40;
+	  posRightConfig.maxSpeedPercent = 70;
 
 	#endif
 	  posLeftConfig.lastError = 0;

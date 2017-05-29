@@ -16,10 +16,15 @@
 #include "Drive.h"
 #include "Q4CLeft.h"
 #include "Q4CRight.h"
+#include "Buzzer.h"
 
 
 typedef enum {
   SUMO_STATE_IDLE,
+#if PL_HAS_DISTANCE_SENSOR
+  SUMO_STATE_SEARCH_OPPONENT,
+  SUMO_STATE_ATTACK_OPPONENT,
+#endif
   SUMO_STATE_DRIVING,
   SUMO_STATE_TURNING,
 } SUMO_State_t;
@@ -61,13 +66,37 @@ static void SumoRun(void) {
     switch(sumoState) {
       case SUMO_STATE_IDLE:
         if ((notifcationValue&SUMO_START_SUMO) && REF_GetLineKind()==REF_LINE_FULL) {
+        for (int i=0; i<5; i++) {
+#if PL_CONFIG_HAS_BUZZER
+	  (void)BUZ_PlayTune(BUZ_TUNE_BUTTON);		//Ton an Button ausgeben
+#endif
+	  	  FRTOS1_vTaskDelay(1100/portTICK_PERIOD_MS);	//insgesamt wird 5.5Sekunden gewartet nach Start
+        }
+#if PL_HAS_DISTANCE_SENSOR
+          sumoState = SUMO_STATE_SEARCH_OPPONENT;	//in Status "Gegner suchen" wechseln
+          break; /* handle next state */
+
+#else
           DRV_SetSpeed(speed, speed);
-          //DRV_SetSpeed(200, 200);
           DRV_SetMode(DRV_MODE_SPEED);
           sumoState = SUMO_STATE_DRIVING;
           break; /* handle next state */
+#endif
         }
         return;
+#if PL_HAS_DISTANCE_SENSOR
+      case SUMO_STATE_SEARCH_OPPONENT:
+    	  //Logik einbauen dass Gegner gesucht wird und anschliessend in State "Gegner attackieren" wechseln
+    	  sumoState = SUMO_STATE_ATTACK_OPPONENT;
+    	  break; /* handle next state */
+    	return;
+      case SUMO_STATE_ATTACK_OPPONENT:
+    	  //Logik einbauen dass Gegner attackiert wird mit vollem Tempo, aber weiterhin gecheckt wird, ob
+    	  //der Gegner genau vor einem ist, nicht dass man über das Ziel hinausschiesst
+    	  sumoState = SUMO_STATE_ATTACK_OPPONENT;
+    	  break; /* handle next state */
+    	return;
+#endif
       case SUMO_STATE_DRIVING:
         if (notifcationValue&SUMO_STOP_SUMO) {
            DRV_SetMode(DRV_MODE_STOP);
@@ -86,6 +115,7 @@ static void SumoRun(void) {
         DRV_SetMode(DRV_MODE_SPEED);
         DRV_SetSpeed(-10000,-10000);
         vTaskDelay(200/portTICK_PERIOD_MS);
+        //Drehen
         TURN_Turn(TURN_RIGHT180, NULL);
         DRV_SetMode(DRV_MODE_SPEED);
         DRV_SetSpeed(speed, speed);

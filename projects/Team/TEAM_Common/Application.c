@@ -42,6 +42,9 @@
 #if PL_CONFIG_HAS_LCD_MENU
   #include "LCD.h"
 #endif
+#if PL_CONFIG_HAS_SUMO
+  #include "Sumo.h"
+#endif
 
 #if PL_CONFIG_HAS_EVENTS
 void APP_EventHandler(EVNT_Handle event) {
@@ -62,6 +65,14 @@ void APP_EventHandler(EVNT_Handle event) {
 	  CLS1_SendStr("Button 1 pressed\n", CLS1_GetStdio()->stdOut);
 #if PL_CONFIG_HAS_BUZZER
 	  (void)BUZ_PlayTune(BUZ_TUNE_BUTTON);
+#endif
+#if PL_CONFIG_HAS_SUMO
+    if (!SUMO_IsRunningSumo()) {		//Start oder Stop des Robots
+    	SUMO_StartSumo();
+    }
+    else {
+    	SUMO_StopSumo();
+    }
 #endif
     break;
   case EVNT_SW1_LPRESSED:
