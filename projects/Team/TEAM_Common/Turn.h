@@ -13,6 +13,10 @@
 #if PL_CONFIG_HAS_TURN
 
 typedef enum {
+#if PL_CONFIG_HAS_SUMO
+  TURN_LEFT5,	/* turn 5 degree left and stop */
+  TURN_RIGHT5,	/* turn 5 degree right and stop */
+#endif
   TURN_LEFT45,   /* turn 45 degree left and stop */
   TURN_LEFT90,   /* turn 90 degree left and stop */
   TURN_RIGHT45, /* turn 90 degree right and stop */

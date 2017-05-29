@@ -76,6 +76,10 @@ static void TURN_AdoptToHardware(void) {
  */
 const unsigned char *TURN_TurnKindStr(TURN_Kind kind) {
   switch(kind) {
+#if PL_CONFIG_HAS_SUMO
+    case TURN_LEFT5:                  return (const unsigned char*)"LEFT5";
+    case TURN_RIGHT5:                 return (const unsigned char*)"RIGHT5";
+#endif
     case TURN_LEFT45:                 return (const unsigned char*)"LEFT45";
     case TURN_LEFT90:                 return (const unsigned char*)"LEFT90";
     case TURN_RIGHT45:                return (const unsigned char*)"RIGHT45";
@@ -150,6 +154,14 @@ static void StepsTurn(int32_t stepsL, int32_t stepsR, TURN_StopFct stopIt, int32
 
 void TURN_Turn(TURN_Kind kind, TURN_StopFct stopIt) {
   switch(kind) {
+#if PL_CONFIG_HAS_SUMO
+    case TURN_LEFT5:
+      StepsTurn(-TURN_Steps90/18, TURN_Steps90/18, stopIt, TURN_STEPS_90_TIMEOUT_MS/2);
+      break;
+    case TURN_RIGHT5:
+      StepsTurn(TURN_Steps90/18, -TURN_Steps90/18, stopIt, TURN_STEPS_90_TIMEOUT_MS/2);
+      break;
+#endif
     case TURN_LEFT45:
       StepsTurn(-TURN_Steps90/2, TURN_Steps90/2, stopIt, TURN_STEPS_90_TIMEOUT_MS/2);
       break;
