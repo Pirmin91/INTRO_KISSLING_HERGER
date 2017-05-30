@@ -141,7 +141,7 @@ static void SumoRun(void) {
              sumoState = SUMO_STATE_IDLE;
              break; /* handle next state */
           }
-          if (counterRandomMode >= 3) {
+          if (counterRandomMode >= 1) {
         	  doRandom = TRUE;		//Nur noch in Random Mode fahren, da Gegner Roboter nicht gefunden
         	  sumoState = SUMO_STATE_DRIVING;
         	  break; /* handle next state */
