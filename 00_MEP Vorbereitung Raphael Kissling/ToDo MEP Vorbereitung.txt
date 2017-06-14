@@ -1,1 +1,6 @@
 - Recap Questions nochmals anschauen (gute Fragen können an MEP kommen)
+- Questions last Slide GIT SW01d
+- SW03a Assembly Code details --> diesen Code versuchen zu verstehen was er macht
+- Traps & Pitfalls SW03a Preproccesor (Seite 6)
+- Correct Critical Section? --> Frage beantworten auf Seite 15 SW03d Interrupts
+- CriticalSection Component (Seite 17 SW03d)
