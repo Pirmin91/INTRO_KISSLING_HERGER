@@ -5,3 +5,5 @@
 - Correct Critical Section? --> Frage beantworten auf Seite 15 SW03d Interrupts
 - CriticalSection Component (Seite 17 SW03d)
 - Beningo Webinars for Preparation RTOS/FREERTOS
+- Wie ist die Reentrancy realisiert bei der Debounce State Machine?
+--> Pirmin fragen ob er das auch so verstanden hat
