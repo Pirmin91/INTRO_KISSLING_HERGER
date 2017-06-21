@@ -7,3 +7,8 @@
 - Beningo Webinars for Preparation RTOS/FREERTOS
 - Wie ist die Reentrancy realisiert bei der Debounce State Machine?
 --> Pirmin fragen ob er das auch so verstanden hat
+- Semaphore --> Difference Counting and Binary Semaphore in FreeRTOS Part 
+- die ganzen FromISR MEthoden (Semaphore) z.B. xSemaphoreGiveFromISR anschauen
+- Slide 17 FreeRTOS SW07c --> ARM Cortex Interrupts Diagram
+- wichtigste Assembler Befehle notieren in Zusammenfassung
+- Queue Quiz 1+2 FreeRTOS Slides Seite 73/74
