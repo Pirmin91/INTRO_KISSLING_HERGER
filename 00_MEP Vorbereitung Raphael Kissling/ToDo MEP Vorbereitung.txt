@@ -12,10 +12,14 @@
 - Slide 17 FreeRTOS SW07c --> ARM Cortex Interrupts Diagram
 - wichtigste Assembler Befehle notieren in Zusammenfassung
 - Queue Quiz 1+2 FreeRTOS Slides Seite 73/74
+- Initialisierungsphase auf ZF nehmen (Question 43 --> Part B)
 - Example PartC Quizes vom Unterricht 
 - verschiedene ANSI C-Operationen wie UTIL1_strcmp, UTIL1_strcnmp, UTIL1_xatoi, sizeof 
 in Zusammenfassung nehmen --> The Utility PE component ( e.g. UTIL1) implements many 
 string routines (copy strings, concatenating strings, etc), and they are all safe: 
 the routine ensures that there is no buffer overflow, and always a zero byte at the end 
 of the buffer.
-- Grösse von verschiedenen Datentypen in C in Zusammenfassung schreiben
+- Grösse von verschiedenen Datentypen in C in Zusammenfassung schreiben (https://usrmisc.wordpress.com/2012/12/27/integer-sizes-in-c-on-32-bit-and-64-bit-linux/)
+- Grösse eines Pointers und allgemein Pointer Theorie
+-Umwandlung Grey in Binary Code
+-Code Example PID control
